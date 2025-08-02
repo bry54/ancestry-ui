@@ -9,12 +9,16 @@ import TreeSearchWrapper from '../pages/tree-search/TreeSearchPageWrapper'
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
-  const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
-  const AccountPage = lazy(() => import('../modules/accounts/AccountPage'))
-  const WidgetsPage = lazy(() => import('../modules/widgets/WidgetsPage'))
-  const ChatPage = lazy(() => import('../modules/apps/chat/ChatPage'))
-  const UsersPage = lazy(() => import('../modules/apps/user-management/UsersPage'))
+    const UsersPage = lazy(() => import('../modules/apps/user-management/UsersPage'))
     const DashboardWrapper = lazy(() =>import('../pages/dashboard/DashboardWrapper'))
+    const AccountPage = lazy(() => import('../pages/accounts/AccountPage'))
+    const HelpSupportWrapper = lazy(() => import('../pages/help-support/HelpSupportPageWrapper.tsx'))
+    const RegistryApprovalsWrapper = lazy(() => import('../pages/registry-approvals/RegistryApprovalsPageWrapper.tsx'))
+    const AuditLogsWrapper = lazy(() => import('../pages/audit-logs/AuditLogsPageWrapper.tsx'))
+    const InvitationsWrapper = lazy(() => import('../pages/invitations/InvitationsPageWrapper.tsx'))
+    const SystemStatusWrapper = lazy(() => import('../pages/system-status/SystemStatusPageWrapper.tsx'))
+    const ChangeLogWrapper = lazy(() => import('../pages/change-logs/ChangeLogsPageWrapper.tsx'))
+
 
     return (
     <Routes>
@@ -34,6 +38,59 @@ const PrivateRoutes = () => {
                 </SuspensedView>
             }
         />
+        <Route
+          path='/profile/*'
+          element={
+            <SuspensedView>
+              <ProfilePage />
+            </SuspensedView>
+          }
+        />
+          <Route
+              path='/user/*'
+              element={
+                  <SuspensedView>
+                      <UsersPage />
+                  </SuspensedView>
+              }
+          />
+          <Route
+              path='help-support'
+              element={
+                  <SuspensedView>
+                      <HelpSupportWrapper />
+                  </SuspensedView>
+              } />
+          <Route
+              path='system-status'
+              element={
+                  <SuspensedView>
+                      <SystemStatusWrapper />
+                  </SuspensedView>
+              } />
+
+          <Route
+              path='registry-approvals'
+              element={
+                  <SuspensedView>
+                      <RegistryApprovalsWrapper />
+                  </SuspensedView>
+              } />
+          <Route
+              path='audit-logs'
+              element={
+                  <SuspensedView>
+                      <AuditLogsWrapper />
+                  </SuspensedView>
+              } />
+          <Route
+              path='invitations'
+              element={
+                  <SuspensedView>
+                      <InvitationsWrapper />
+                  </SuspensedView>
+              } />
+
           <Route
               path='account/*'
               element={
@@ -42,47 +99,16 @@ const PrivateRoutes = () => {
                   </SuspensedView>
               }
           />
-        <Route
-          path='crafted/pages/profile/*'
-          element={
-            <SuspensedView>
-              <ProfilePage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='crafted/pages/wizards/*'
-          element={
-            <SuspensedView>
-              <WizardsPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='crafted/widgets/*'
-          element={
-            <SuspensedView>
-              <WidgetsPage />
-            </SuspensedView>
-          }
-        />
 
-        <Route
-          path='apps/chat/*'
-          element={
-            <SuspensedView>
-              <ChatPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='apps/user-management/*'
-          element={
-            <SuspensedView>
-              <UsersPage />
-            </SuspensedView>
-          }
-        />
+          <Route
+              path='change-logs'
+              element={
+                  <SuspensedView>
+                      <ChangeLogWrapper />
+                  </SuspensedView>
+              }
+          />
+
         {/* Page Not Found */}
         <Route path='*' element={<Navigate to='/error/404' />} />
       </Route>

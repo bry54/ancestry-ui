@@ -5,7 +5,7 @@ import {TreeSearchPage} from './TreeSearchPage.tsx'
 const TreeSearchPageWrapper: FC = () => {
   return (
     <>
-      <PageTitle breadcrumbs={[]}>Layout Builder</PageTitle>
+      <PageTitle breadcrumbs={[]}>Tree Search</PageTitle>
       <TreeSearchPage />
     </>
   )
