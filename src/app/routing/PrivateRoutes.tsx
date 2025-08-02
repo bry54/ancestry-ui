@@ -8,7 +8,7 @@ import {WithChildren} from '../../_metronic/helpers'
 import TreeSearchWrapper from '../pages/tree-search/TreeSearchPageWrapper'
 
 const PrivateRoutes = () => {
-    const ProfileManagementWrapper = lazy(() => import('../pages/profile-management/ProfileManagementPageWrapper.tsx'))
+    const ProfileManagementWrapper = lazy(() => import('../pages/profiles/ProfilesPage.tsx'))
     const UsersPage = lazy(() => import('../pages/user-management/UsersPage'))
     const DashboardWrapper = lazy(() =>import('../pages/dashboard/DashboardWrapper'))
     const AccountPage = lazy(() => import('../pages/accounts/AccountPage'))
