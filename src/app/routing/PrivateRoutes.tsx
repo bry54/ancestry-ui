@@ -8,8 +8,8 @@ import {WithChildren} from '../../_metronic/helpers'
 import TreeSearchWrapper from '../pages/tree-search/TreeSearchPageWrapper'
 
 const PrivateRoutes = () => {
-  const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
-    const UsersPage = lazy(() => import('../modules/apps/user-management/UsersPage'))
+    const ProfileManagementWrapper = lazy(() => import('../pages/profile-management/ProfileManagementPageWrapper.tsx'))
+    const UsersPage = lazy(() => import('../pages/user-management/UsersPage'))
     const DashboardWrapper = lazy(() =>import('../pages/dashboard/DashboardWrapper'))
     const AccountPage = lazy(() => import('../pages/accounts/AccountPage'))
     const HelpSupportWrapper = lazy(() => import('../pages/help-support/HelpSupportPageWrapper.tsx'))
@@ -42,7 +42,7 @@ const PrivateRoutes = () => {
           path='/profile/*'
           element={
             <SuspensedView>
-              <ProfilePage />
+              <ProfileManagementWrapper />
             </SuspensedView>
           }
         />
