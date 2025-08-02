@@ -22,8 +22,11 @@ const PrivateRoutes = () => {
         {/* Redirect to Dashboard after success login/registartion */}
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
+          {/* Lazy Modules */}
+
           <Route path='dashboard' element={<SuspensedView><DashboardWrapper /></SuspensedView>} />
-        <Route
+
+          <Route
             path='tree-search'
             element={
                 <SuspensedView>
@@ -31,7 +34,14 @@ const PrivateRoutes = () => {
                 </SuspensedView>
             }
         />
-        {/* Lazy Modules */}
+          <Route
+              path='account/*'
+              element={
+                  <SuspensedView>
+                      <AccountPage />
+                  </SuspensedView>
+              }
+          />
         <Route
           path='crafted/pages/profile/*'
           element={
@@ -56,14 +66,7 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
-        <Route
-          path='account/*'
-          element={
-            <SuspensedView>
-              <AccountPage />
-            </SuspensedView>
-          }
-        />
+
         <Route
           path='apps/chat/*'
           element={
