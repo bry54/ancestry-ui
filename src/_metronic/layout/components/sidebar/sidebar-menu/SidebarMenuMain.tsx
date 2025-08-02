@@ -17,7 +17,7 @@ const SidebarMenuMain = () => {
         />
         <SidebarMenuItem
             to='/tree-search'
-            icon='filter-search'
+            icon='search-list'
             title={intl.formatMessage({id: 'MENU.TREE_SEARCH'})}
             fontIcon='bi-tree'
         />
@@ -32,19 +32,19 @@ const SidebarMenuMain = () => {
 
             <SidebarMenuItem
                 to='/apps/user-management/users'
-                icon='abstract-28'
+                icon='profile-user'
                 title={intl.formatMessage({id: 'MENU.PROFILE_I_MANAGE'})}
                 fontIcon='bi-layers'
             />
         <SidebarMenuItem
             to='/tree-search'
-            icon='element-plus'
+            icon='sms'
             title={intl.formatMessage({id: 'MENU.INVITATIONS'})}
             fontIcon='bi-tree'
         />
         <SidebarMenuItem
             to='/tree-search'
-            icon='element-plus'
+            icon='information'
             title={intl.formatMessage({id: 'MENU.HELP_SUPPORT'})}
             fontIcon='bi-tree'
         />
@@ -56,25 +56,25 @@ const SidebarMenuMain = () => {
         </div>
         <SidebarMenuItem
             to='/apps/user-management/users'
-            icon='abstract-28'
+            icon='user'
             title={intl.formatMessage({id: 'MENU.USER_MANAGEMENT'})}
             fontIcon='bi-layers'
         />
         <SidebarMenuItem
             to='/tree-search'
-            icon='element-plus'
+            icon='bank'
             title={intl.formatMessage({id: 'MENU.GOVERNMENT_APPROVALS'})}
             fontIcon='bi-tree'
         />
         <SidebarMenuItem
             to='/tree-search'
-            icon='element-plus'
+            icon='notepad'
             title={intl.formatMessage({id: 'MENU.AUDIT_LOGS'})}
             fontIcon='bi-tree'
         />
         <SidebarMenuItem
             to='/tree-search'
-            icon='element-plus'
+            icon='graph-up'
             title={intl.formatMessage({id: 'MENU.SYSTEM_STATUS'})}
             fontIcon='bi-tree'
         />
@@ -82,12 +82,12 @@ const SidebarMenuMain = () => {
             <a
                 target='_blank'
                 className='menu-link'
-                href={import.meta.env.VITE_APP_PREVIEW_DOCS_URL + '/changelog'}
+                href={ '/changelog'}
             >
           <span className='menu-icon'>
             <KTIcon iconName='code' className='fs-2' />
           </span>
-                <span className='menu-title'>Changelog {import.meta.env.VITE_APP_VERSION}</span>
+                <span className='menu-title'>{intl.formatMessage({id: 'MENU.CHANGE_LOG'})} {import.meta.env.VITE_APP_VERSION}</span>
             </a>
         </div>
     </>)
