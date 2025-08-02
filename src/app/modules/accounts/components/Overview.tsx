@@ -17,7 +17,7 @@ export function Overview() {
             <h3 className='fw-bolder m-0'>Profile Details</h3>
           </div>
 
-          <Link to='/crafted/account/settings' className='btn btn-primary align-self-center'>
+          <Link to='/account/settings' className='btn btn-primary align-self-center'>
             Edit Profile
           </Link>
         </div>
@@ -104,7 +104,7 @@ export function Overview() {
                 <h4 className='text-gray-800 fw-bolder'>We need your attention!</h4>
                 <div className='fs-6 text-gray-600'>
                   Your payment was declined. To start using tools, please
-                  <Link className='fw-bolder' to='/crafted/account/settings'>
+                  <Link className='fw-bolder' to='/account/settings'>
                     {' '}
                     Add Payment Method
                   </Link>

@@ -14,6 +14,18 @@ const Navbar = () => {
   return (
     <div className='app-navbar flex-shrink-0'>
 
+        <div className={clsx('app-navbar-item', itemClass)}>
+            <div className='d-flex flex-column'>
+                <div className='fw-bolder d-flex align-items-center fs-5'>
+                    {currentUser?.displayName}
+                    <span className='badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2'>Pro</span>
+                </div>
+                <a href='#' className='fw-bold text-muted text-hover-primary fs-7'>
+                    {currentUser?.email}
+                </a>
+            </div>
+        </div>
+
       <div className={clsx('app-navbar-item', itemClass)}>
         <div
           className={clsx('cursor-pointer symbol', userAvatarClass)}
