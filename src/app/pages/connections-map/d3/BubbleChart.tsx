@@ -2,49 +2,20 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
+export interface BubbleNode {
+  name: string;
+  value?: number;
+  children?: BubbleNode[];
+}
+
 interface BubbleChartProps {
   width?: number;
   height?: number;
+  data?: BubbleNode;
 }
 
-const BubbleChart: React.FC<BubbleChartProps> = ({ width = 640, height = 480 }) => {
+const BubbleChart: React.FC<BubbleChartProps> = ({ data, width = 640, height = 480 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
-
-  const data = {
-    name: "flare",
-    children: [
-      {
-        name: "analytics",
-        children: [
-          {
-            name: "cluster",
-            children: [
-              { name: "AgglomerativeCluster", value: 3938 },
-              { name: "CommunityStructure", value: 3812 },
-              { name: "HierarchicalCluster", value: 6714 },
-              { name: "MergeEdge", value: 743 }
-            ]
-          },
-          {
-            name: "graph",
-            children: [
-              { name: "BetweennessCentrality", value: 3534 },
-              { name: "LinkDistance", value: 5731 },
-              { name: "MaxFlowMinCut", value: 7840 },
-              { name: "ShortestPath", value: 5914 },
-              { name: "SpanningTree", value: 3416 }
-            ]
-          },
-          {
-            name: "optimization",
-            children: [
-              { name: "AspectRatioBanker", value: 7074 }
-            ]
-          }
-        ]
-      }
-    ]
-  };
 
   useEffect(() => {
     if (svgRef.current) {
@@ -76,6 +47,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({ width = 640, height = 480 }) 
           .attr("text-anchor", "middle")
           .attr("dy", "0.3em")
           .style("font-size", "10px")
+          .style("font-family", "Overpass")
           .text(d => d.data.name);
     }
   }, [data, width, height]);

@@ -4,7 +4,7 @@ import {ConnectionsMapHeader} from "./ConnectionsMapHeader.tsx";
 import {OverviewPage} from "./components/overview/OverviewPage.tsx";
 import {ParentChildPage} from "./components/parent-child/ParentChildPage.tsx";
 import {TreeofLifePage} from "./components/tree-of-life/TreeofLifePage.tsx";
-import FamilySizePage from "./components/family-size/FamilySizePage.tsx";
+import {FamilySizePage} from "./components/family-size/FamilySizePage.tsx";
 import {FamilyNamesPage} from "./components/family-names/FamilyNamesPage.tsx";
 
 const ConnectionsMapPage: React.FC = () => {

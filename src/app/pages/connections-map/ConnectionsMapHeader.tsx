@@ -13,7 +13,7 @@ const ConnectionsMapHeader: FC = () => {
   return (
     <>
       <Content>
-        <div className='card mb-1 mb-xl-10'>
+        <div className='card mb-1 mb-xl-5'>
           <div className='card-body pt-9 pb-0'>
             <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
               <div className='me-7 mb-4'>
