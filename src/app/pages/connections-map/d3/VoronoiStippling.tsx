@@ -1,14 +1,16 @@
 
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import {useAuth} from "../../../modules/auth";
 
 interface VoronoiStipplingProps {
   width?: number;
   height?: number;
 }
 
-const VoronoiStippling: React.FC<VoronoiStipplingProps> = ({ width = 640, height = 480 }) => {
+const VoronoiStippling: React.FC<VoronoiStipplingProps> = ({ width = 1000, height = 1000 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const {currentUser} = useAuth()
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -19,7 +21,7 @@ const VoronoiStippling: React.FC<VoronoiStipplingProps> = ({ width = 640, height
 
     const image = new Image();
     image.crossOrigin = "anonymous";
-    image.src = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/176331/mona-lisa.jpg';
+    image.src = currentUser?.photoURL;
 
     image.onload = () => {
       const imageWidth = image.width;
