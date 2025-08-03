@@ -5,13 +5,14 @@ import TopBarProgress from 'react-topbar-progress-indicator'
 
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
-import TreeSearchWrapper from '../pages/tree-search/TreeSearchPageWrapper'
+import ConnectionsMapPage from "../pages/connections-map/ConnectionsMapPage.tsx";
 
 const PrivateRoutes = () => {
     const ProfileManagementWrapper = lazy(() => import('../pages/profiles/ProfilesPage.tsx'))
     const UsersPage = lazy(() => import('../pages/user-management/UsersPage'))
     const DashboardWrapper = lazy(() =>import('../pages/dashboard/DashboardWrapper'))
     const AccountPage = lazy(() => import('../pages/accounts/AccountPage'))
+    const ConectionsMapPage = lazy(() => import('../pages/connections-map/ConnectionsMapPage.tsx'))
     const HelpSupportWrapper = lazy(() => import('../pages/help-support/HelpSupportPageWrapper.tsx'))
     const RegistryApprovalsWrapper = lazy(() => import('../pages/registry-approvals/RegistryApprovalsPageWrapper.tsx'))
     const AuditLogsWrapper = lazy(() => import('../pages/audit-logs/AuditLogsPageWrapper.tsx'))
@@ -30,14 +31,6 @@ const PrivateRoutes = () => {
 
           <Route path='dashboard' element={<SuspensedView><DashboardWrapper /></SuspensedView>} />
 
-          <Route
-            path='tree-search'
-            element={
-                <SuspensedView>
-                    <TreeSearchWrapper />
-                </SuspensedView>
-            }
-        />
         <Route
           path='/profile/*'
           element={
@@ -96,6 +89,15 @@ const PrivateRoutes = () => {
               element={
                   <SuspensedView>
                       <AccountPage />
+                  </SuspensedView>
+              }
+          />
+
+          <Route
+              path='connections-map/*'
+              element={
+                  <SuspensedView>
+                      <ConnectionsMapPage />
                   </SuspensedView>
               }
           />

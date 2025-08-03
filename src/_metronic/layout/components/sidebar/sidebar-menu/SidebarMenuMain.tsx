@@ -16,9 +16,9 @@ const SidebarMenuMain = () => {
                 fontIcon='bi-app-indicator'
             />
             <SidebarMenuItem
-                to='/tree-search'
-                icon='search-list'
-                title={intl.formatMessage({id: 'MENU.TREE_SEARCH'})}
+                to='/connections-map'
+                icon='technology-2'
+                title={intl.formatMessage({id: 'MENU.CONNECTIONS_MAP'})}
                 fontIcon='bi-tree'
             />
 
