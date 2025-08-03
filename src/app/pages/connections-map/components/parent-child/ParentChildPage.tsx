@@ -45,7 +45,16 @@ export function ParentChildPage() {
 
     return (
         <Content>
+            <div className="card card-custom p-2" style={{
+                minHeight: '50vh',
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%", // Or a dynamic height based on parent
+                width: "100%",
+            }}>
             <CollapsibleTree data={data} />
+            </div>
         </Content>
     );
 }

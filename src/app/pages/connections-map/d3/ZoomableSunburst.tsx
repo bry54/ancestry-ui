@@ -7,7 +7,7 @@ interface ZoomableSunburstProps {
   height?: number;
 }
 
-const ZoomableSunburst: React.FC<ZoomableSunburstProps> = ({ width = 928, height = 928 }) => {
+const ZoomableSunburst: React.FC<ZoomableSunburstProps> = ({ width = 900, height = 600 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
   const data = {
@@ -49,7 +49,7 @@ const ZoomableSunburst: React.FC<ZoomableSunburstProps> = ({ width = 928, height
   useEffect(() => {
     if (svgRef.current) {
       const svg = d3.select(svgRef.current);
-      svg.selectAll("*”).remove();
+      svg.selectAll('*').remove();
 
       const radius = width / 6;
 
@@ -97,7 +97,7 @@ const ZoomableSunburst: React.FC<ZoomableSunburstProps> = ({ width = 928, height
         .attr("pointer-events", "none")
         .attr("text-anchor", "middle")
         .style("user-select", "none")
-        .selectAll("text")
+        .selectAll('text')
         .data(root.descendants().slice(1))
         .join("text")
         .attr("dy", "0.35em")
