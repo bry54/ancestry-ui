@@ -24,7 +24,7 @@ const ForceDirectedGraph2: React.FC<ForceDirectedGraph2Props> = ({ width = 928, 
     canvas.style.height = `${height}px`;
     context.scale(dpi, dpi);
 
-    d3.json('https://gist.githubusercontent.com/mbostock/4062045/raw/5916d145c8c048a62951c40ac29616a23a2192a5/miserables.json').then((data: any) => {
+    d3.json('https://gist.githubusercontent.com/abkunal/98d35b9b235312e90f3e43c9f7b6932b/raw/d5589ddd53731ae8eec7abd091320df91cdcf5cd/miserables.json').then((data: any) => {
       const links = data.links.map((d: any) => ({ ...d }));
       const nodes = data.nodes.map((d: any) => ({ ...d }));
 
