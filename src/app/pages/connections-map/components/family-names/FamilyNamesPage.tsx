@@ -10,7 +10,7 @@ export function FamilyNamesPage() {
     const FULL_URL = `${API_URL}/connections-map/name-distribution`;
 
     const intl = useIntl()
-    const [data, setData] = useState<WordData[]>();
+    const [data, setData] = useState<WordData[]>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -42,19 +42,17 @@ export function FamilyNamesPage() {
     if (!data) {
         return <Content>No data available.</Content>;
     }
-
     return (
-
-            <div style={{
+        <Content>
+            <div className="card card-custom p-2" style={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 height: "100%", // Or a dynamic height based on parent
                 width: "100%",
             }}>
-                <Content>
-                    <WordCloud words={data} />
-                </Content>
+                <WordCloud words={data} />
             </div>
+        </Content>
     );
 }
