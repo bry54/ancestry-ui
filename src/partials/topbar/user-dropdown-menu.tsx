@@ -43,10 +43,10 @@ export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
 
   // Use display data from currentUser
   const displayName =
-    user?.fullname ||
-    (user?.first_name && user?.last_name
-      ? `${user.first_name} ${user.last_name}`
-      : user?.username || 'User');
+    user?.fullName ||
+    (user?.firstName && user?.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user?.email || 'User');
 
   const displayEmail = user?.email || '';
   // const displayAvatar = user?.pic || toAbsoluteUrl('/media/avatars/300-2.png');

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useAuth } from '@/auth/context/auth-context';
+import { Any } from '@/auth/lib';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertCircle, Check, MoveLeft } from 'lucide-react';
+import { AlertCircle, Check, LoaderCircleIcon, MoveLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,14 +16,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { LoaderCircleIcon } from 'lucide-react';
 import {
   getResetRequestSchema,
   ResetRequestSchemaType,
 } from '../forms/reset-password-schema';
 
 export function ResetPasswordPage() {
-  const {} = useAuth();
+  const { requestPasswordReset } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -42,15 +41,12 @@ export function ResetPasswordPage() {
 
       console.log('Submitting password reset for:', values.email);
 
-      // Request password reset using Supabase directly
-      const { error } = await supabase.auth.resetPasswordForEmail(
-        values.email,
-        {
-          redirectTo: `${window.location.origin}/auth/reset-password`,
-        },
-      );
-
-      if (error) {
+      try {
+        await requestPasswordReset(values.email);
+        console.log(
+          `Implement redirect to${window.location.origin}/auth/reset-password`,
+        );
+      } catch (error: Any) {
         throw new Error(error.message);
       }
 
@@ -127,7 +123,8 @@ export function ResetPasswordPage() {
             <Button type="submit" className="w-full" disabled={isProcessing}>
               {isProcessing ? (
                 <span className="flex items-center gap-2">
-                  <LoaderCircleIcon className="h-4 w-4 animate-spin" /> Sending Link...
+                  <LoaderCircleIcon className="h-4 w-4 animate-spin" /> Sending
+                  Link...
                 </span>
               ) : (
                 'Send Reset Link'

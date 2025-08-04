@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/auth/context/auth-context';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
 
 /**
  * Callback page for OAuth authentication redirects.
@@ -34,38 +33,7 @@ export function CallbackPage() {
     const handleCallback = async () => {
       try {
         console.log('Processing OAuth callback');
-
-        // Get the session from Supabase
-        const { data, error } = await supabase.auth.getSession();
-
-        if (error) {
-          console.error('Error getting session:', error);
-          throw error;
-        }
-
-        if (!data.session) {
-          console.error('No session found after OAuth callback');
-          throw new Error('Authentication session not established');
-        }
-
-        console.log('Session obtained successfully from OAuth provider');
-
-        // Create auth model from session data (same structure as used in regular login)
-        const authModel = {
-          access_token: data.session.access_token,
-          refresh_token: data.session.refresh_token,
-        };
-
-        // Save auth data to context and local storage
-        saveAuth(authModel);
-        console.log('Auth data saved to context');
-
-        // Get the next URL - either from query param or default to root
-        const nextPath = searchParams.get('next') || '/';
-
-        // Navigate to the target page
-        console.log('Redirecting to:', nextPath);
-        navigate(nextPath);
+        throw new Error('Implement Callback for OAUTH');
       } catch (err) {
         console.error('Error processing OAuth callback:', err);
         setError('An unexpected error occurred during authentication');

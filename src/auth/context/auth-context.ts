@@ -1,5 +1,11 @@
 import { createContext, useContext } from 'react';
-import { AuthModel, UserModel } from '@/auth/lib/models';
+import {
+  AuthModel,
+  IResetPassword,
+  ISignIn,
+  ISignUp,
+  UserModel,
+} from '@/auth/lib/models';
 
 // Create AuthContext with types
 export const AuthContext = createContext<{
@@ -9,19 +15,10 @@ export const AuthContext = createContext<{
   saveAuth: (auth: AuthModel | undefined) => void;
   user?: UserModel;
   setUser: React.Dispatch<React.SetStateAction<UserModel | undefined>>;
-  login: (email: string, password: string) => Promise<void>;
-  register: (
-    email: string,
-    password: string,
-    password_confirmation: string,
-    firstName?: string,
-    lastName?: string,
-  ) => Promise<void>;
+  login: (dto: ISignIn) => Promise<void>;
+  register: (dto: ISignUp) => Promise<void>;
   requestPasswordReset: (email: string) => Promise<void>;
-  resetPassword: (
-    password: string,
-    password_confirmation: string,
-  ) => Promise<void>;
+  resetPassword: (dto: IResetPassword) => Promise<void>;
   resendVerificationEmail: (email: string) => Promise<void>;
   getUser: () => Promise<UserModel | null>;
   updateProfile: (userData: Partial<UserModel>) => Promise<UserModel>;

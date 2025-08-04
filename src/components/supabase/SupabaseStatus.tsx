@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SupabaseAdapter } from '@/auth/adapters/supabase-adapter';
+import { JwtAuthAdapter } from '@/auth/adapters/jwt-auth-adapter.ts';
 
 /**
  * A simple component that displays the status of the Supabase connection.
@@ -14,7 +14,7 @@ export const SupabaseStatus: React.FC = () => {
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        const isAvailable = await SupabaseAdapter.isAvailable();
+        const isAvailable = await JwtAuthAdapter.isAvailable();
         if (isAvailable) {
           setStatus('connected');
         } else {

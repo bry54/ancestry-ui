@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
-import { SupabaseAdapter } from '@/auth/adapters/supabase-adapter';
+import { JwtAuthAdapter } from '@/auth/adapters/jwt-auth-adapter.ts';
 import { useAuth } from '@/auth/context/auth-context';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertCircle, Check, Eye, EyeOff } from 'lucide-react';
+import {
+  AlertCircle,
+  Check,
+  Eye,
+  EyeOff,
+  LoaderCircleIcon,
+} from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert';
@@ -19,7 +25,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Icons } from '@/components/common/icons';
 import { getSigninSchema, SigninSchemaType } from '../forms/signin-schema';
-import { LoaderCircleIcon } from 'lucide-react';
 
 export function SignInPage() {
   const [searchParams] = useSearchParams();
@@ -94,7 +99,10 @@ export function SignInPage() {
       }
 
       // Sign in using the auth context
-      await login(values.email, values.password);
+      await login({
+        email: values.email,
+        password: values.password,
+      });
 
       // Get the 'next' parameter from URL if it exists
       const nextPath = searchParams.get('next') || '/';
@@ -130,7 +138,7 @@ export function SignInPage() {
       console.log('Initiating Google sign-in with redirect:', redirectTo);
 
       // Use our adapter to initiate the OAuth flow
-      await SupabaseAdapter.signInWithOAuth('google', { redirectTo });
+      await JwtAuthAdapter.signInWithOAuth('google', { redirectTo });
 
       // The browser will be redirected automatically
     } catch (err) {
@@ -157,16 +165,6 @@ export function SignInPage() {
           </p>
         </div>
 
-        <Alert appearance="light" size="sm" close={false}>
-          <AlertIcon>
-            <AlertCircle className="text-primary" />
-          </AlertIcon>
-          <AlertTitle className="text-accent-foreground">
-            Use <strong>demo@kt.com</strong> username and {` `}
-            <strong>demo123</strong> password for demo access.
-          </AlertTitle>
-        </Alert>
-
         <div className="flex flex-col gap-3.5">
           <Button
             variant="outline"
@@ -176,8 +174,8 @@ export function SignInPage() {
           >
             {isGoogleLoading ? (
               <span className="flex items-center gap-2">
-                <LoaderCircleIcon className="size-4! animate-spin" /> Signing in with
-                Google...
+                <LoaderCircleIcon className="size-4! animate-spin" /> Signing in
+                with Google...
               </span>
             ) : (
               <>
