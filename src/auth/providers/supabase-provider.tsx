@@ -19,7 +19,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const verify = async () => {
     if (auth) {
       try {
-        const user = await getUser();
+        const user: UserModel | null = await getUser();
         setCurrentUser(user || undefined);
       } catch {
         saveAuth(undefined);
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const login = async (email: string, password: string) => {
     try {
-      const auth = await SupabaseAdapter.login(email, password);
+      const auth: AuthModel = await SupabaseAdapter.login(email, password);
       saveAuth(auth);
       const user = await getUser();
       setCurrentUser(user || undefined);
