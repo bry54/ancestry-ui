@@ -1,6 +1,9 @@
 // Define UUID type for consistent usage
 export type UUID = string;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Any = any;
+
 // Language code type for user preferences
 export type LanguageCode = 'en' | 'de' | 'es' | 'fr' | 'ja' | 'zh';
 

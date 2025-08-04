@@ -1,5 +1,5 @@
 import { getData, setData } from '@/lib/storage';
-import { AuthModel } from './models';
+import {Any, AuthModel} from './models';
 
 const AUTH_LOCAL_STORAGE_KEY = `${import.meta.env.VITE_APP_NAME}-auth-v${
   import.meta.env.VITE_APP_VERSION || '1.0'
@@ -38,5 +38,23 @@ const removeAuth = () => {
     console.error('AUTH LOCAL STORAGE REMOVE ERROR', error);
   }
 };
+
+/**
+* Setup axios to intercept every request attaching auth bearer token
+ */
+export function setupAxios(axios: Any) {
+  axios.defaults.headers.Accept = 'application/json'
+  axios.interceptors.request.use(
+      (config: {headers: {Authorization: string}}) => {
+        const auth = getAuth()
+        if (auth && auth.access_token) {
+          config.headers.Authorization = `Bearer ${auth.access_token}`
+        }
+
+        return config
+      },
+      (err: Any) => Promise.reject(err)
+  )
+}
 
 export { AUTH_LOCAL_STORAGE_KEY, getAuth, removeAuth, setAuth };
