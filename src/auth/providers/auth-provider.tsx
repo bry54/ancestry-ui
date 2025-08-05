@@ -11,10 +11,10 @@ import {
 } from '@/auth/lib/models';
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [loading, setLoading] = useState(true);
-  const [auth, setAuth] = useState<AuthModel | undefined>(authHelper.getAuth());
+  const [loading, setLoading] = useState<boolean>(true);
+  const [auth, setAuth] = useState<AuthModel | undefined>();
   const [currentUser, setCurrentUser] = useState<UserModel | undefined>();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   // Check if user is admin
   useEffect(() => {
@@ -24,32 +24,32 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const verify = async () => {
     if (auth) {
       try {
-        const user: UserModel | null = await getUser();
+        const user: UserModel | null = await getLoggedInUser();
         setCurrentUser(user || undefined);
       } catch {
-        saveAuth(undefined);
+        saveAuthToken(undefined);
         setCurrentUser(undefined);
       }
     }
   };
 
-  const saveAuth = (auth: AuthModel | undefined) => {
+  const saveAuthToken = (auth: AuthModel | undefined) => {
     setAuth(auth);
     if (auth) {
-      authHelper.setAuth(auth);
+      authHelper.setAuthInLS(auth);
     } else {
-      authHelper.removeAuth();
+      authHelper.removeAuthFromLS();
     }
   };
 
   const login = async (dto: ISignIn) => {
     try {
       const auth: AuthModel = await JwtAuthAdapter.login(dto);
-      saveAuth(auth);
-      const user = await getUser();
+      saveAuthToken(auth);
+      const user = await getLoggedInUser();
       setCurrentUser(user || undefined);
     } catch (error) {
-      saveAuth(undefined);
+      saveAuthToken(undefined);
       throw error;
     }
   };
@@ -57,11 +57,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const register = async (dto: ISignUp) => {
     try {
       const auth = await JwtAuthAdapter.register(dto);
-      saveAuth(auth);
-      const user = await getUser();
+      saveAuthToken(auth);
+      const user = await getLoggedInUser();
       setCurrentUser(user || undefined);
     } catch (error) {
-      saveAuth(undefined);
+      saveAuthToken(undefined);
       throw error;
     }
   };
@@ -78,8 +78,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
     await JwtAuthAdapter.resendVerificationEmail(email);
   };
 
-  const getUser = async () => {
-    return await JwtAuthAdapter.getCurrentUser();
+  const getLoggedInUser = async () => {
+    return await JwtAuthAdapter.getLoggedInUser();
   };
 
   const updateProfile = async (userData: Partial<UserModel>) => {
@@ -88,7 +88,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const logout = () => {
     JwtAuthAdapter.logout();
-    saveAuth(undefined);
+    saveAuthToken(undefined);
     setCurrentUser(undefined);
   };
 
@@ -98,7 +98,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         loading,
         setLoading,
         auth,
-        saveAuth,
+        saveAuth: saveAuthToken,
         user: currentUser,
         setUser: setCurrentUser,
         login,
@@ -106,7 +106,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         requestPasswordReset,
         resetPassword,
         resendVerificationEmail,
-        getUser,
+        getUser: getLoggedInUser,
         updateProfile,
         logout,
         verify,

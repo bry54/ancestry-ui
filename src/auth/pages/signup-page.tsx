@@ -18,6 +18,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { LoaderCircleIcon } from 'lucide-react';
 import { getSignupSchema, SignupSchemaType } from '../forms/signup-schema';
+import {Any, ISignUp} from "@/auth/lib";
 
 export function SignUpPage() {
   const navigate = useNavigate();
@@ -45,14 +46,17 @@ export function SignUpPage() {
       setIsProcessing(true);
       setError(null);
 
-      // Register the user with Supabase
-      await register(
-        values.email,
-        values.password,
-        values.confirmPassword,
-        values.firstName,
-        values.lastName,
-      );
+      const dto: ISignUp = {
+          email: values.email,
+          password: values.password,
+          passwordConfirmation: values.confirmPassword,
+          person: {
+              firstName: values.firstName,
+              lastName: values.lastName,
+          }
+      }
+
+      await register(dto);
 
       // Set success message and metadata
       setSuccessMessage(
@@ -66,13 +70,10 @@ export function SignUpPage() {
       setTimeout(() => {
         navigate('/auth/signin');
       }, 3000);
-    } catch (err) {
+    } catch (err: Any) {
       console.error('Registration error:', err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'An unexpected error occurred during registration. Please try again.',
-      );
+      const errMessage = err?.message || 'An unexpected error occurred during registration. Please try again.';
+      setError(errMessage);
     } finally {
       setIsProcessing(false);
     }

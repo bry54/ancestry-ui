@@ -8,7 +8,7 @@ const AUTH_LOCAL_STORAGE_KEY = `${import.meta.env.VITE_APP_NAME}-auth-v${
 /**
  * Get stored auth information from local storage
  */
-const getAuth = (): AuthModel | undefined => {
+const getAuthFromLS = (): AuthModel | undefined => {
   try {
     const auth = getData(AUTH_LOCAL_STORAGE_KEY) as AuthModel | undefined;
     return auth;
@@ -20,14 +20,14 @@ const getAuth = (): AuthModel | undefined => {
 /**
  * Save auth information to local storage
  */
-const setAuth = (auth: AuthModel) => {
+const setAuthInLS = (auth: AuthModel) => {
   setData(AUTH_LOCAL_STORAGE_KEY, auth);
 };
 
 /**
  * Remove auth information from local storage
  */
-const removeAuth = () => {
+const removeAuthFromLS = () => {
   if (!localStorage) {
     return;
   }
@@ -42,11 +42,11 @@ const removeAuth = () => {
 /**
  * Setup axios to intercept every request attaching auth bearer token
  */
-export function setupAxios(axios: Any) {
+function setupAxios(axios: Any) {
   axios.defaults.headers.Accept = 'application/json';
   axios.interceptors.request.use(
     (config: { headers: { Authorization: string } }) => {
-      const auth = getAuth();
+      const auth = getAuthFromLS();
       if (auth && auth.token) {
         config.headers.Authorization = `Bearer ${auth.token}`;
       }
@@ -57,4 +57,4 @@ export function setupAxios(axios: Any) {
   );
 }
 
-export { AUTH_LOCAL_STORAGE_KEY, getAuth, removeAuth, setAuth };
+export { AUTH_LOCAL_STORAGE_KEY, getAuthFromLS, removeAuthFromLS, setAuthInLS, setupAxios };

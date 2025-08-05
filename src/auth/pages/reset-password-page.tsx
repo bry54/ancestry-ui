@@ -42,7 +42,7 @@ export function ResetPasswordPage() {
       console.log('Submitting password reset for:', values.email);
 
       try {
-        await requestPasswordReset(values.email);
+        const token = await requestPasswordReset(values.email);
         console.log(
           `Implement redirect to${window.location.origin}/auth/reset-password`,
         );

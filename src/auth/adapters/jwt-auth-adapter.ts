@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const { VITE_API_URL } = import.meta.env;
 const LOGIN_URL = `${VITE_API_URL}/auth/login`;
-const REGISTER_URL = `${VITE_API_URL}/auth/login`;
+const REGISTER_URL = `${VITE_API_URL}/auth/register`;
 const FORGOT_PASSWORD_URL = `${VITE_API_URL}/auth/forgot-password`;
 const RESET_PASSWORD_URL = `${VITE_API_URL}/auth/reset-password`;
 const AUTH_ME_URL = `${VITE_API_URL}/auth/me`;
@@ -16,17 +16,13 @@ export const JwtAuthAdapter = {
    * Login with email and password
    */
   async login(dto: ISignIn): Promise<AuthModel> {
-    console.log('JWT Auth Adapter: Attempting login with email:', dto.email);
-
     try {
       const { data } = await axios.post(LOGIN_URL, dto);
-
       return {
         token: data.token,
         refreshToken: data.refreshToken,
       };
     } catch (error: Any) {
-      console.error('LOGIN_ERROR:', error);
       throw new Error(error?.response?.data?.message || error.message);
     }
   },
@@ -41,13 +37,13 @@ export const JwtAuthAdapter = {
 
     try {
       const { data } = await axios.post(REGISTER_URL, dto);
-
       return {
-        token: data.session.accessToken,
-        refreshToken: data.session.refreshToken,
+        token: data.token,
+        refreshToken: data.refreshToken,
       };
     } catch (error: Any) {
-      throw new Error(error.message);
+      const errMessage = error.response?.data?.message || error.message;
+      throw new Error(errMessage);
     }
   },
 
@@ -55,8 +51,6 @@ export const JwtAuthAdapter = {
    * Request password reset
    */
   async requestPasswordReset(email: string): Promise<void> {
-    console.log('Requesting password reset for:', email);
-
     try {
       const redirectUrl = `${window.location.origin}/auth/reset-password`;
       console.log('Using redirect URL:', redirectUrl);
@@ -101,7 +95,7 @@ export const JwtAuthAdapter = {
   /**
    * Get current user from the session
    */
-  async getCurrentUser(): Promise<UserModel | null> {
+  async getLoggedInUser(): Promise<UserModel | null> {
     try {
       const { data } = await axios.get(AUTH_ME_URL);
       return data;
@@ -115,7 +109,7 @@ export const JwtAuthAdapter = {
    */
   async updateUserProfile(userData: Partial<UserModel>): Promise<UserModel> {
     console.log('Update user profile:', userData);
-    return this.getCurrentUser() as Promise<UserModel>;
+    return this.getLoggedInUser() as Promise<UserModel>;
   },
 
   /**
