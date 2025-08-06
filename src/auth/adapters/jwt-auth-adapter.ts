@@ -1,16 +1,12 @@
-import { AuthModel, UserModel } from '@/auth/lib/models';
+import { AuthModel, ISignIn, ISignUp, UserModel } from '@/lib/interfaces';
 import { supabase } from '@/lib/supabase';
 
-/**
- * Supabase adapter that maintains the same interface as the existing auth flow
- * but uses Supabase under the hood.
- */
-export const SupabaseAdapter = {
+export const JwtAuthAdapter = {
   /**
    * Login with email and password
    */
-  async login(email: string, password: string): Promise<AuthModel> {
-    console.log('SupabaseAdapter: Attempting login with email:', email);
+  async login(dto: ISignIn): Promise<AuthModel> {
+    console.log('SupabaseAdapter: Attempting login with email:', dto.email);
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -92,13 +88,7 @@ export const SupabaseAdapter = {
   /**
    * Register a new user
    */
-  async register(
-    email: string,
-    password: string,
-    password_confirmation: string,
-    firstName?: string,
-    lastName?: string,
-  ): Promise<AuthModel> {
+  async register(dto: ISignUp): Promise<AuthModel> {
     if (password !== password_confirmation) {
       throw new Error('Passwords do not match');
     }

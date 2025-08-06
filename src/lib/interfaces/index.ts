@@ -37,6 +37,11 @@ export interface IResetPassword {
   passwordConfirmation: string;
 }
 
+export interface IChangePassword {
+  password: string;
+  passwordConfirmation: string;
+}
+
 export interface ISignUp {
   email: string;
   password: string;

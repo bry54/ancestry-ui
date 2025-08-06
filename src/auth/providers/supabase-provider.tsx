@@ -1,5 +1,5 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
-import { SupabaseAdapter } from '@/auth/adapters/supabase-adapter';
+import { JwtAuthAdapter } from '@/auth/adapters/jwt-auth-adapter.ts';
 import { AuthContext } from '@/auth/context/auth-context';
 import * as authHelper from '@/auth/lib/helpers';
 import { AuthModel, UserModel } from '@/auth/lib/models';
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const login = async (email: string, password: string) => {
     try {
-      const auth = await SupabaseAdapter.login(email, password);
+      const auth = await JwtAuthAdapter.login(email, password);
       saveAuth(auth);
       const user = await getUser();
       setCurrentUser(user || undefined);
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     lastName?: string,
   ) => {
     try {
-      const auth = await SupabaseAdapter.register(
+      const auth = await JwtAuthAdapter.register(
         email,
         password,
         password_confirmation,
@@ -74,30 +74,30 @@ export function AuthProvider({ children }: PropsWithChildren) {
   };
 
   const requestPasswordReset = async (email: string) => {
-    await SupabaseAdapter.requestPasswordReset(email);
+    await JwtAuthAdapter.requestPasswordReset(email);
   };
 
   const resetPassword = async (
     password: string,
     password_confirmation: string,
   ) => {
-    await SupabaseAdapter.resetPassword(password, password_confirmation);
+    await JwtAuthAdapter.resetPassword(password, password_confirmation);
   };
 
   const resendVerificationEmail = async (email: string) => {
-    await SupabaseAdapter.resendVerificationEmail(email);
+    await JwtAuthAdapter.resendVerificationEmail(email);
   };
 
   const getUser = async () => {
-    return await SupabaseAdapter.getCurrentUser();
+    return await JwtAuthAdapter.getCurrentUser();
   };
 
   const updateProfile = async (userData: Partial<UserModel>) => {
-    return await SupabaseAdapter.updateUserProfile(userData);
+    return await JwtAuthAdapter.updateUserProfile(userData);
   };
 
   const logout = () => {
-    SupabaseAdapter.logout();
+    JwtAuthAdapter.logout();
     saveAuth(undefined);
     setCurrentUser(undefined);
   };
