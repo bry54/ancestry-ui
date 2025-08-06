@@ -10,7 +10,7 @@ export function ThemeProvider({
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="light" //'light' : 'dark'
+      defaultTheme="system"
       storageKey="vite-theme"
       enableSystem
       disableTransitionOnChange

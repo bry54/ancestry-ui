@@ -15,7 +15,7 @@ export const RequireAuth = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (!auth?.token || !verificationStarted.current) {
+      if (!auth?.access_token || !verificationStarted.current) {
         verificationStarted.current = true;
         try {
           await verify();
@@ -36,7 +36,7 @@ export const RequireAuth = () => {
   }
 
   // If not authenticated, redirect to login
-  if (!auth?.token) {
+  if (!auth?.access_token) {
     return (
       <Navigate
         to={`/auth/signin?next=${encodeURIComponent(location.pathname)}`}

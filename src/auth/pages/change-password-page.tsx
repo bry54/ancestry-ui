@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/auth/context/auth-context';
-import { Any } from '@/auth/lib';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  AlertCircle,
-  Check,
-  Eye,
-  EyeOff,
-  LoaderCircleIcon,
-} from 'lucide-react';
+import { AlertCircle, Check, Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { LoaderCircleIcon } from 'lucide-react';
 import {
   getNewPasswordSchema,
   NewPasswordSchemaType,
@@ -29,12 +24,13 @@ import {
 export function ChangePasswordPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { updateProfile } = useAuth();
+  const {} = useAuth();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [tokenValid, setTokenValid] = useState(false);
 
   // Check for different possible token parameter names used by Supabase
   // Supabase might use 'token', 'code', 'token_hash' or pass it as a URL hash
@@ -48,6 +44,23 @@ export function ChangePasswordPage() {
     'All search parameters:',
     Object.fromEntries(searchParams.entries()),
   );
+
+  // Process Supabase recovery token
+  useEffect(() => {
+    // This automatically processes the token in the URL
+    const { data: authListener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        // Token is valid and has been processed by Supabase
+        console.log('Password recovery mode activated');
+        setTokenValid(true);
+        setSuccessMessage('You can now set your new password');
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
 
   // Also check for hash fragment which might contain the token
   useEffect(() => {
@@ -76,10 +89,14 @@ export function ChangePasswordPage() {
       setIsProcessing(true);
       setError(null);
 
-      try {
-        await updateProfile(values);
-      } catch (error: Any) {
-        new Error(error.message);
+      // Use Supabase's updateUser method directly
+      // The token is already processed by the onAuthStateChange handler
+      const { error } = await supabase.auth.updateUser({
+        password: values.password,
+      });
+
+      if (error) {
+        throw new Error(error.message);
       }
 
       // Set success message
@@ -104,7 +121,7 @@ export function ChangePasswordPage() {
     }
   }
 
-  if (!token) {
+  if (!token && !tokenValid) {
     return (
       <div className="max-w-md mx-auto space-y-5">
         <div className="text-center space-y-2">

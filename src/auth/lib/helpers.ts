@@ -1,5 +1,5 @@
 import { getData, setData } from '@/lib/storage';
-import { Any, AuthModel } from './models';
+import { AuthModel } from './models';
 
 const AUTH_LOCAL_STORAGE_KEY = `${import.meta.env.VITE_APP_NAME}-auth-v${
   import.meta.env.VITE_APP_VERSION || '1.0'
@@ -8,7 +8,7 @@ const AUTH_LOCAL_STORAGE_KEY = `${import.meta.env.VITE_APP_NAME}-auth-v${
 /**
  * Get stored auth information from local storage
  */
-const getAuthFromLS = (): AuthModel | undefined => {
+const getAuth = (): AuthModel | undefined => {
   try {
     const auth = getData(AUTH_LOCAL_STORAGE_KEY) as AuthModel | undefined;
     return auth;
@@ -20,14 +20,14 @@ const getAuthFromLS = (): AuthModel | undefined => {
 /**
  * Save auth information to local storage
  */
-const setAuthInLS = (auth: AuthModel) => {
+const setAuth = (auth: AuthModel) => {
   setData(AUTH_LOCAL_STORAGE_KEY, auth);
 };
 
 /**
  * Remove auth information from local storage
  */
-const removeAuthFromLS = () => {
+const removeAuth = () => {
   if (!localStorage) {
     return;
   }
@@ -39,22 +39,4 @@ const removeAuthFromLS = () => {
   }
 };
 
-/**
- * Setup axios to intercept every request attaching auth bearer token
- */
-function setupAxios(axios: Any) {
-  axios.defaults.headers.Accept = 'application/json';
-  axios.interceptors.request.use(
-    (config: { headers: { Authorization: string } }) => {
-      const auth = getAuthFromLS();
-      if (auth && auth.token) {
-        config.headers.Authorization = `Bearer ${auth.token}`;
-      }
-
-      return config;
-    },
-    (err: Any) => Promise.reject(err),
-  );
-}
-
-export { AUTH_LOCAL_STORAGE_KEY, getAuthFromLS, removeAuthFromLS, setAuthInLS, setupAxios };
+export { AUTH_LOCAL_STORAGE_KEY, getAuth, removeAuth, setAuth };

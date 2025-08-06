@@ -1,66 +1,29 @@
 // Define UUID type for consistent usage
 export type UUID = string;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Any = any;
-
 // Language code type for user preferences
 export type LanguageCode = 'en' | 'de' | 'es' | 'fr' | 'ja' | 'zh';
 
-export interface ISignIn {
-  email: string;
-  password: string;
-}
-
-export interface IResetPassword {
-  password: string;
-  passwordConfirmation: string;
-}
-
-export interface ISignUp {
-  email: string;
-  password: string;
-  passwordConfirmation: string;
-  phone?: string;
-  person: {
-    firstName: string;
-    lastName: string;
-    dateOfBirth?: string;
-    dateOfDeath?: string;
-    gender?: string;
-    otherGivenNames?: string[];
-    nickNames?: string[];
-    nationalId?: string;
-    passportNumber?: string;
-    birthCertificateEntry?: string;
-    motherName?: string;
-    fatherName?: string;
-    placeOfBirth?: {
-      city: string;
-      country: string;
-    };
-    placeOfDeath?: {
-      city: string;
-      country: string;
-    };
-  };
-}
-
+// Auth model representing the authentication session
 export interface AuthModel {
-  token: string;
-  refreshToken?: string;
+  access_token: string;
+  refresh_token?: string;
 }
 
 // User model representing the user profile
 export interface UserModel {
+  username: string;
+  password?: string; // Optional as we don't always retrieve passwords
   email: string;
-  firstName: string;
-  lastName: string;
-  fullName?: string; // May be stored directly in metadata
-  emailVerified?: boolean;
+  first_name: string;
+  last_name: string;
+  fullname?: string; // May be stored directly in metadata
+  email_verified?: boolean;
+  occupation?: string;
+  company_name?: string; // Using snake_case consistently
+  phone?: string;
   roles?: number[]; // Array of role IDs
-  photoURL?: string;
+  pic?: string;
   language?: LanguageCode; // Maintain existing type
-  isAdmin?: boolean; // Added admin flag
-  role: string;
+  is_admin?: boolean; // Added admin flag
 }
