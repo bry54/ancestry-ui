@@ -5,8 +5,8 @@ import axios from 'axios';
 const { VITE_API_URL } = import.meta.env;
 const LOGIN_URL = `${VITE_API_URL}/auth/login`;
 const REGISTER_URL = `${VITE_API_URL}/auth/register`;
-const FORGOT_PASSWORD_URL = `${VITE_API_URL}/auth/forgot-password`;
 const RESET_PASSWORD_URL = `${VITE_API_URL}/auth/reset-password`;
+const CHANGE_PASSWORD_URL = `${VITE_API_URL}/auth/change-password`;
 const AUTH_ME_URL = `${VITE_API_URL}/auth/me`;
 const RESEND_VERIFICATION_EMAIL_URL = `${VITE_API_URL}/auth/resend-verification-email`;
 const LOGOUT_URL = `${VITE_API_URL}/auth/logout`;
@@ -52,12 +52,10 @@ export const JwtAuthAdapter = {
    */
   async requestPasswordReset(email: string): Promise<void> {
     try {
-      const redirectUrl = `${window.location.origin}/auth/reset-password`;
-      console.log('Using redirect URL:', redirectUrl);
-      await axios.post(FORGOT_PASSWORD_URL, { email });
+      await axios.post(RESET_PASSWORD_URL, { email });
     } catch (error: Any) {
       console.error('Password reset request error:', error);
-      throw new Error(error.message);
+      throw new Error(error.response?.data?.message || error.message);
     }
   },
 
@@ -69,7 +67,7 @@ export const JwtAuthAdapter = {
       if (dto.password !== dto.passwordConfirmation) {
         throw new Error('Passwords do not match');
       }
-      await axios.post(RESET_PASSWORD_URL, dto);
+      await axios.post(CHANGE_PASSWORD_URL, dto);
     } catch (error: Any) {
       throw new Error(error.message);
     }

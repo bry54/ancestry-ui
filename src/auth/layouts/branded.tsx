@@ -1,3 +1,4 @@
+import { FormattedMessage } from 'react-intl';
 import { Link, Outlet } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,10 +9,10 @@ export function BrandedLayout() {
       <style>
         {`
           .branded-bg {
-            background-image: url('${toAbsoluteUrl('/media/images/2600x1600/1.png')}');
+            background-image: url('${toAbsoluteUrl('/media/images/2600x1200/bg-1.png')}');
           }
           .dark .branded-bg {
-            background-image: url('${toAbsoluteUrl('/media/images/2600x1600/1-dark.png')}');
+            background-image: url('${toAbsoluteUrl('/media/images/2600x1600/bg-1-dark.png')}');
           }
         `}
       </style>
@@ -24,7 +25,7 @@ export function BrandedLayout() {
           </Card>
         </div>
 
-        <div className="lg:rounded-xl lg:border lg:border-border lg:m-5 order-1 lg:order-2 bg-top xxl:bg-center xl:bg-cover bg-no-repeat branded-bg">
+        <div className="lg:rounded-xl lg:border lg:border-border lg:m-5 order-1 lg:order-2 bg-top xxl:bg-center xl:bg-cover bg-repeat branded-bg text-center">
           <div className="flex flex-col p-8 lg:p-16 gap-4">
             <Link to="/">
               <img
@@ -34,18 +35,12 @@ export function BrandedLayout() {
               />
             </Link>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 text-center">
               <h3 className="text-2xl font-semibold text-mono">
-                Secure Dashboard Access
+                <FormattedMessage id="APP.TITLE" />
               </h3>
               <div className="text-base font-medium text-secondary-foreground">
-                A robust authentication gateway ensuring
-                <br /> secure&nbsp;
-                <span className="text-mono font-semibold">
-                  efficient user access
-                </span>
-                &nbsp;to the Metronic
-                <br /> Dashboard interface.
+                <FormattedMessage id="APP.SUB_TITLE" />
               </div>
             </div>
           </div>
