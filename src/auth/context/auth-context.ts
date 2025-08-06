@@ -1,34 +1,33 @@
 import { createContext, useContext } from 'react';
-import { AuthModel, UserModel } from '@/auth/lib/models';
+import {
+  AuthModel,
+  IChangePassword,
+  IResetPassword,
+  ISignIn,
+  ISignUp,
+  UserModel,
+} from '@/lib/interfaces';
 
-// Create AuthContext with types
-export const AuthContext = createContext<{
+interface IContextType {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  auth?: AuthModel;
+  accessToken?: string;
   saveAuth: (auth: AuthModel | undefined) => void;
   user?: UserModel;
   setUser: React.Dispatch<React.SetStateAction<UserModel | undefined>>;
-  login: (email: string, password: string) => Promise<void>;
-  register: (
-    email: string,
-    password: string,
-    password_confirmation: string,
-    firstName?: string,
-    lastName?: string,
-  ) => Promise<void>;
-  requestPasswordReset: (email: string) => Promise<void>;
-  resetPassword: (
-    password: string,
-    password_confirmation: string,
-  ) => Promise<void>;
+  login: (dto: ISignIn) => Promise<void>;
+  register: (dto: ISignUp) => Promise<void>;
+  requestPasswordReset: (dto: IResetPassword) => Promise<void>;
+  changePassword: (dto: IChangePassword) => Promise<void>;
   resendVerificationEmail: (email: string) => Promise<void>;
-  getUser: () => Promise<UserModel | null>;
-  updateProfile: (userData: Partial<UserModel>) => Promise<UserModel>;
+  getUser: () => Promise<UserModel | undefined>;
   logout: () => void;
   verify: () => Promise<void>;
   isAdmin: boolean;
-}>({
+}
+
+// Create AuthContext with types
+export const AuthContext = createContext<IContextType>({
   loading: false,
   setLoading: () => {},
   saveAuth: () => {},
@@ -36,10 +35,9 @@ export const AuthContext = createContext<{
   login: async () => {},
   register: async () => {},
   requestPasswordReset: async () => {},
-  resetPassword: async () => {},
+  changePassword: async () => {},
   resendVerificationEmail: async () => {},
-  getUser: async () => null,
-  updateProfile: async () => ({}) as UserModel,
+  getUser: async () => undefined,
   logout: () => {},
   verify: async () => {},
   isAdmin: false,

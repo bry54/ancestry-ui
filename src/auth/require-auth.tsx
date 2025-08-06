@@ -8,14 +8,14 @@ import { useAuth } from './context/auth-context';
  * If user is not authenticated, redirects to the login page.
  */
 export const RequireAuth = () => {
-  const { auth, verify, loading: globalLoading } = useAuth();
+  const { accessToken, verify, loading: globalLoading } = useAuth();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const verificationStarted = useRef(false);
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (!auth?.access_token || !verificationStarted.current) {
+      if (!accessToken || !verificationStarted.current) {
         verificationStarted.current = true;
         try {
           await verify();
@@ -28,7 +28,7 @@ export const RequireAuth = () => {
     };
 
     checkAuth();
-  }, [auth, verify]);
+  }, [accessToken, verify]);
 
   // Show screen loader while checking authentication
   if (loading || globalLoading) {
@@ -36,7 +36,7 @@ export const RequireAuth = () => {
   }
 
   // If not authenticated, redirect to login
-  if (!auth?.access_token) {
+  if (!accessToken) {
     return (
       <Navigate
         to={`/auth/signin?next=${encodeURIComponent(location.pathname)}`}

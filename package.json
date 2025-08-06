@@ -8,12 +8,9 @@
     "build": "tsc && vite build",
     "lint": "eslint src --fix",
     "format": "prettier --write .",
-    "preview": "vite preview",
-    "create-demo-user": "tsx scripts/create-demo-user.js",
-    "debug-auth": "tsx scripts/debug-auth.js"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@auth0/auth0-spa-js": "^2.2.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
@@ -22,7 +19,6 @@
     "@formatjs/intl-relativetimeformat": "^11.4.11",
     "@hookform/resolvers": "^5.1.1",
     "@remixicon/react": "^4.6.0",
-    "@supabase/supabase-js": "^2.50.2",
     "@tailwindcss/vite": "^4.1.10",
     "@tanstack/react-query": "^5.81.2",
     "@tanstack/react-query-devtools": "^5.81.2",

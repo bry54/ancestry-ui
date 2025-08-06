@@ -127,11 +127,11 @@ export function MegaMenuMobile() {
     level: number = 0,
   ): JSX.Element[] => {
     return items.map((item: MenuItem, index: number) => {
-      if (!item.disabled) {
-        return buildMenuItemChild(item, index, level);
-      } else {
-        return <></>;
-      }
+      //if (!item.disabled) {
+      return buildMenuItemChild(item, index, level);
+      //} else {
+      //return <></>;
+      //}
     });
   };
 

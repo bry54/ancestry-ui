@@ -42,15 +42,11 @@ export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
   const { theme, setTheme } = useTheme();
 
   // Use display data from currentUser
-  const displayName =
-    user?.fullname ||
-    (user?.first_name && user?.last_name
-      ? `${user.first_name} ${user.last_name}`
-      : user?.username || 'User');
+  const displayName = user?.fullName;
 
   const displayEmail = user?.email || '';
-  // const displayAvatar = user?.pic || toAbsoluteUrl('/media/avatars/300-2.png');
-  const displayAvatar = toAbsoluteUrl('/media/avatars/300-2.png');
+  const displayAvatar =
+    user?.photoURL || toAbsoluteUrl('/media/avatars/blank.png');
 
   const handleLanguage = (lang: Language) => {
     changeLanguage(lang);

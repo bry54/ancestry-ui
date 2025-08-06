@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/auth/context/auth-context.ts';
 import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar';
 import { SearchDialog } from '@/partials/dialogs/search/search-dialog';
 import { AppsDropdownMenu } from '@/partials/topbar/apps-dropdown-menu';
@@ -34,6 +35,7 @@ import { MegaMenuMobile } from './mega-menu-mobile';
 import { SidebarMenu } from './sidebar-menu';
 
 export function Header() {
+  const { user } = useAuth();
   const [isSidebarSheetOpen, setIsSidebarSheetOpen] = useState(false);
   const [isMegaMenuSheetOpen, setIsMegaMenuSheetOpen] = useState(false);
 
@@ -48,6 +50,9 @@ export function Header() {
     setIsSidebarSheetOpen(false);
     setIsMegaMenuSheetOpen(false);
   }, [pathname]);
+
+  const displayPic =
+    user?.photoURL || toAbsoluteUrl('/media/avatars/blank.png');
 
   return (
     <header
@@ -181,7 +186,7 @@ export function Header() {
                 trigger={
                   <img
                     className="size-9 rounded-full border-2 border-green-500 shrink-0 cursor-pointer"
-                    src={toAbsoluteUrl('/media/avatars/300-2.png')}
+                    src={displayPic}
                     alt="User Avatar"
                   />
                 }

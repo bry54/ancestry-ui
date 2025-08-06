@@ -47,8 +47,8 @@ function setupAxios(axios: Any) {
   axios.interceptors.request.use(
     (config: { headers: { Authorization: string } }) => {
       const auth = getAuth();
-      if (auth && auth.access_token) {
-        config.headers.Authorization = `Bearer ${auth.access_token}`;
+      if (auth && auth.accessToken) {
+        config.headers.Authorization = `Bearer ${auth.accessToken}`;
       }
 
       return config;

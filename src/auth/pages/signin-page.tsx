@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Agent, OAuthProvider } from '@/lib/enums';
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -79,8 +80,8 @@ export function SignInPage() {
   const form = useForm<SigninSchemaType>({
     resolver: zodResolver(getSigninSchema()),
     defaultValues: {
-      email: 'demo@kt.com',
-      password: 'demo123',
+      email: '',
+      password: '',
       rememberMe: true,
     },
   });
@@ -99,7 +100,11 @@ export function SignInPage() {
       }
 
       // Sign in using the auth context
-      await login(values.email, values.password);
+      await login({
+        email: values.email,
+        password: values.password,
+        agent: Agent.WEB,
+      });
 
       // Get the 'next' parameter from URL if it exists
       const nextPath = searchParams.get('next') || '/';
@@ -135,7 +140,9 @@ export function SignInPage() {
       console.log('Initiating Google sign-in with redirect:', redirectTo);
 
       // Use our adapter to initiate the OAuth flow
-      await JwtAuthAdapter.signInWithOAuth('google', { redirectTo });
+      await JwtAuthAdapter.signInWithOAuth(OAuthProvider.GOOGLE, {
+        redirectTo,
+      });
 
       // The browser will be redirected automatically
     } catch (err) {
