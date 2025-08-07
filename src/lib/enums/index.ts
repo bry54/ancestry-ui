@@ -4,8 +4,8 @@ export enum Agent {
 }
 export enum LanguageCode {
   EN = 'en',
-  DE = 'de',
-  ES = 'es',
+  SN = 'sn',
+  ND = 'nd',
   FR = 'fr',
   JA = 'ja',
   ZH = 'zh',

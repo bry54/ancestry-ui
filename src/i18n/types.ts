@@ -1,6 +1,5 @@
 import { type MessageFormatElement } from 'react-intl';
-
-export type LanguageCode = 'en' | 'fr' | 'ar' | 'zh';
+import { LanguageCode } from '@/lib/enums';
 
 export type LanguageDirection = 'ltr' | 'rtl';
 
