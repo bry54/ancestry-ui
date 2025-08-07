@@ -42,7 +42,7 @@ import {
   AuthAccountDeactivatedPage,
   AuthWelcomeMessagePage,
 } from '@/pages/auth';
-import { DefaultPage, Demo1DarkSidebarPage } from '@/pages/dashboards';
+import { Demo1LightSidebarPage } from '@/pages/dashboard';
 import {
   NetworkAppRosterPage,
   NetworkAuthorPage,
@@ -99,8 +99,39 @@ export function AppRoutingSetup() {
     <Routes>
       <Route element={<RequireAuth />}>
         <Route element={<Demo1Layout />}>
-          <Route path="/" element={<DefaultPage />} />
-          <Route path="/dark-sidebar" element={<Demo1DarkSidebarPage />} />
+          <Route path="/" element={<Demo1LightSidebarPage />} />
+          <Route path="/user/profiles" element={<NetworkMiniCardsPage />} />
+          <Route path="/user/connections" element={<>Connections Page</>} />
+          <Route
+            path="/network/tree-explorer"
+            element={<>Tree Explorer Page</>}
+          />
+          <Route
+            path="/network/relations-graph"
+            element={<>Relations graph Page</>}
+          />
+          <Route
+            path="/network/name-distribution"
+            element={<>Name Distribution Page</>}
+          />
+          <Route path="/network/family-size" element={<>Family Size Page</>} />
+          <Route
+            path="/network/relations-graph"
+            element={<>Relations graph Page</>}
+          />
+          <Route
+            path="/admin/user-management"
+            element={<>User Management Page</>}
+          />
+          <Route
+            path="/admin/government-approvals"
+            element={<>Government Approvals Page</>}
+          />
+          <Route path="/admin/audit-logs" element={<>Audit Logs Page</>} />
+          <Route path="/system/status" element={<>System status Page</>} />
+          <Route path="/system/change-logs" element={<>Change Logs Page</>} />
+          <Route path="/system/help" element={<>Help Page</>} />
+
           <Route
             path="/public-profile/profiles/default/"
             element={<ProfileDefaultPage />}
