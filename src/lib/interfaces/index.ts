@@ -1,4 +1,4 @@
-import { Agent, LanguageCode } from '@/lib/enums';
+import { Agent, LanguageCode, Role } from '@/lib/enums';
 
 export type Any = any;
 
@@ -16,8 +16,8 @@ export interface UserModel {
   lastName: string;
   fullName: string;
   emailVerified?: boolean;
-  roles?: string[];
-  role?: string;
+  roles?: Role[];
+  role?: Role;
   photoURL?: string;
   language?: LanguageCode;
   isAdmin?: boolean;

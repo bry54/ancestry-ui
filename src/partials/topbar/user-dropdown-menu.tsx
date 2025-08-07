@@ -2,16 +2,28 @@ import { ReactNode } from 'react';
 import { useAuth } from '@/auth/context/auth-context';
 import { I18N_LANGUAGES } from '@/i18n/config';
 import { Language } from '@/i18n/types';
-import { BetweenHorizontalStart, Coffee, CreditCard, FileText, Globe, IdCard, Moon, Settings, Shield, SquareCode, UserCircle, Users } from 'lucide-react';
+import { RiSwitchLine } from '@remixicon/react';
+import { EyeIcon, Globe, IdCard, UserCircle } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Link } from 'react-router';
+import { Role } from '@/lib/enums';
 import { toAbsoluteUrl } from '@/lib/helpers';
+import { Any } from '@/lib/interfaces';
 import { useLanguage } from '@/providers/i18n-provider';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Switch } from '@/components/ui/switch';
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
   const { logout, user } = useAuth();
@@ -29,8 +41,22 @@ export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
     changeLanguage(lang);
   };
 
+  const handleRoleChange = (role: Role) => {
+    console.log(role);
+  };
+
   const handleThemeToggle = (checked: boolean) => {
     setTheme(checked ? 'dark' : 'light');
+  };
+
+  const getIcon = (value: Role) => {
+    let roleIcon: Any;
+    if (value === Role.ADMIN) {
+      roleIcon = <UserCircle className="w-4 h-4 rounded-full" />;
+    } else if (value === Role.VIEWER) {
+      roleIcon = <EyeIcon className="w-4 h-4 rounded-full" />;
+    }
+    return roleIcon;
   };
 
   return (
@@ -77,6 +103,41 @@ export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
             My Account
           </Link>
         </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        {/* Role Selection Submenu with Radio Group */}
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="flex items-center gap-2 [&_[data-slot=dropdown-menu-sub-trigger-indicator]]:hidden hover:[&_[data-slot=badge]]:border-input data-[state=open]:[&_[data-slot=badge]]:border-input">
+            <RiSwitchLine />
+            <span className="flex items-center justify-between gap-2 grow relative">
+              Switch Role
+              <Badge variant="primary" appearance="light" size="sm">
+                {user?.role}
+              </Badge>
+            </span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="w-48">
+            <DropdownMenuRadioGroup
+              value={user?.role}
+              onValueChange={(value) => {
+                if (value != user?.role) handleRoleChange(value as Role);
+              }}
+            >
+              {user?.roles &&
+                user.roles.map((item) => (
+                  <DropdownMenuRadioItem
+                    key={item}
+                    value={item}
+                    className="flex items-center gap-2"
+                  >
+                    {getIcon(item as Role)}
+                    <span>{item}</span>
+                  </DropdownMenuRadioItem>
+                ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
 
         <DropdownMenuSeparator />
 

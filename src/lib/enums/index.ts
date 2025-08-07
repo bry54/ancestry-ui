@@ -2,6 +2,12 @@ export enum Agent {
   WEB = 'WEB',
   MOBILE = 'MOBILE',
 }
+
+export enum Role {
+  ADMIN = 'ADMIN',
+  VIEWER = 'VIEWER',
+}
+
 export enum LanguageCode {
   EN = 'en',
   SN = 'sn',
