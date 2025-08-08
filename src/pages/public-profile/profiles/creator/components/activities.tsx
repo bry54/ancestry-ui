@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 import { ActivitiesAnniversary } from '@/partials/activities/anniversary';
 import { ActivitiesBloggingConference } from '@/partials/activities/blogging-conference';
-import { ActivitiesInterview } from '@/partials/activities/interview';
+import { SystemLog } from '@/partials/activities/interview';
 import { ActivitiesFollowersMilestone } from '@/partials/activities/milestone';
 import { ActivitiesNewArticle } from '@/partials/activities/new-article';
 import { ActivitiesUpcomingContent } from '@/partials/activities/upcoming-content';
@@ -45,7 +45,7 @@ const Activities = () => {
       </CardHeader>
       <CardContent>
         <ActivitiesNewArticle />
-        <ActivitiesInterview />
+        <SystemLog />
         <ActivitiesUpcomingContent />
         <ActivitiesBloggingConference
           image={

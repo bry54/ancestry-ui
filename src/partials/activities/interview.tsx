@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { TimelineItem } from './timeline-item';
 
-const ActivitiesInterview = () => {
+const SystemLog = () => {
   return (
     <TimelineItem icon={LogIn} line={true}>
       <div className="flex flex-col">
@@ -23,4 +23,4 @@ const ActivitiesInterview = () => {
   );
 };
 
-export { ActivitiesInterview };
+export { SystemLog };

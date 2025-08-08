@@ -43,6 +43,10 @@ import {
   AuthWelcomeMessagePage,
 } from '@/pages/auth';
 import { Demo1LightSidebarPage } from '@/pages/dashboard';
+import { FamilySizePage } from '@/pages/family-network/family-size';
+import { NameDistributionPage } from '@/pages/family-network/name-distribution';
+import { RelationsGraphPage } from '@/pages/family-network/relations-graph';
+import { TreeExplorerPage } from '@/pages/family-network/tree-explorer';
 import {
   NetworkAppRosterPage,
   NetworkAuthorPage,
@@ -92,9 +96,10 @@ import {
   StoreClientPage,
   WishlistPage,
 } from '@/pages/store-client';
-import { Navigate, Route, Routes } from 'react-router';
+import { ChangeLogsPage, HelpSupportPage } from '@/pages/system';
 import { AccountHomePage } from '@/pages/user/account';
-import { TreeExplorerPage } from '@/pages/my-network/tree-explorer';
+import { UserManagementPage } from '@/pages/user/user-management';
+import { Navigate, Route, Routes } from 'react-router';
 
 export function AppRoutingSetup() {
   return (
@@ -105,35 +110,28 @@ export function AppRoutingSetup() {
           <Route path="/user/profiles" element={<NetworkMiniCardsPage />} />
           <Route path="/user/account" element={<AccountHomePage />} />
           <Route path="/user/connections" element={<>Connections Page</>} />
-          <Route
-            path="/network/tree-explorer"
-            element={<TreeExplorerPage />}
-          />
+          <Route path="/network/tree-explorer" element={<TreeExplorerPage />} />
           <Route
             path="/network/relations-graph"
-            element={<>Relations graph Page</>}
+            element={<RelationsGraphPage />}
           />
           <Route
             path="/network/name-distribution"
-            element={<>Name Distribution Page</>}
+            element={<NameDistributionPage />}
           />
-          <Route path="/network/family-size" element={<>Family Size Page</>} />
-          <Route
-            path="/network/relations-graph"
-            element={<>Relations graph Page</>}
-          />
+          <Route path="/network/family-size" element={<FamilySizePage />} />
+
           <Route
             path="/admin/user-management"
-            element={<>User Management Page</>}
+            element={<UserManagementPage />}
           />
           <Route
             path="/admin/government-approvals"
             element={<>Government Approvals Page</>}
           />
           <Route path="/admin/audit-logs" element={<>Audit Logs Page</>} />
-          <Route path="/system/status" element={<>System status Page</>} />
-          <Route path="/system/change-logs" element={<>Change Logs Page</>} />
-          <Route path="/system/help" element={<>Help Page</>} />
+          <Route path="/system/change-logs" element={<ChangeLogsPage />} />
+          <Route path="/system/help" element={<HelpSupportPage />} />
 
           <Route
             path="/public-profile/profiles/default/"

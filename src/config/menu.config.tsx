@@ -1,7 +1,6 @@
 import {
   FileCode,
   GitBranch,
-  ListChecks,
   ListTree,
   LucideLayoutDashboard,
   Users as PeopleIcon,
@@ -42,7 +41,6 @@ export const MENU_SIDEBAR: MenuConfig = [
   },
   { title: 'Audit Logs', icon: ScrollText, path: '/admin/audit-logs' },
   { heading: 'Help & Support' },
-  { title: 'System Status', icon: ListChecks, path: '/system/status' },
   { title: 'Change Logs', icon: FileCode, path: '/system/change-logs' },
   { title: 'Help', icon: ShieldQuestionMark, path: '/system/help' },
 ];
