@@ -9,9 +9,9 @@ import {
 import { useSettings } from '@/providers/settings-provider';
 import { Button } from '@/components/ui/button';
 import { Container } from '@/components/common/container';
-import { NetworkMiniCardsContent } from '.';
+import { TreeExplorerContent } from '.';
 
-export function NetworkMiniCardsPage() {
+export function TreeExplorerPage() {
   const {  } = useSettings();
 
   return (
@@ -19,19 +19,18 @@ export function NetworkMiniCardsPage() {
       <Container>
           <Toolbar>
             <ToolbarHeading>
-              <ToolbarPageTitle />
+              <ToolbarPageTitle text='Tree Explorer' />
               <ToolbarDescription>
-                Central Hub for Personal Customization
+                Explore your family tree nodes
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <Button variant="outline">Upload CSV</Button>
-              <Button variant="primary">Add User</Button>
+              <Button variant="primary">Download PNG</Button>
             </ToolbarActions>
           </Toolbar>
         </Container>
       <Container>
-        <NetworkMiniCardsContent />
+        <TreeExplorerContent />
       </Container>
     </Fragment>
   );

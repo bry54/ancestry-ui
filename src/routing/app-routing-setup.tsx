@@ -94,6 +94,7 @@ import {
 } from '@/pages/store-client';
 import { Navigate, Route, Routes } from 'react-router';
 import { AccountHomePage } from '@/pages/user/account';
+import { TreeExplorerPage } from '@/pages/my-network/tree-explorer';
 
 export function AppRoutingSetup() {
   return (
@@ -106,7 +107,7 @@ export function AppRoutingSetup() {
           <Route path="/user/connections" element={<>Connections Page</>} />
           <Route
             path="/network/tree-explorer"
-            element={<>Tree Explorer Page</>}
+            element={<TreeExplorerPage />}
           />
           <Route
             path="/network/relations-graph"

@@ -16,7 +16,7 @@ import {
 import { type MenuConfig } from './types';
 
 export const MENU_SIDEBAR: MenuConfig = [
-  { title: 'Dashboard', icon: LucideLayoutDashboard, path: '' },
+  { title: 'Dashboard', icon: LucideLayoutDashboard, path: '/' },
   { heading: 'User' },
   { title: 'Profiles', icon: PeopleIcon, path: '/user/profiles' },
   { title: 'My Connections', icon: Send, path: '/user/connections' },
