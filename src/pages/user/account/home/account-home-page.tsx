@@ -3,7 +3,7 @@ import { UserHero } from '@/partials/common/user-hero';
 import { Mail, MapPin, Zap } from 'lucide-react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Container } from '@/components/common/container';
-import { AccountSections } from './components';
+import { AccountUserProfileContent } from '@/pages/user/account';
 
 export function AccountHomePage() {
   const image = (
@@ -26,7 +26,7 @@ export function AccountHomePage() {
         ]}
       />
       <Container>
-        <AccountSections />
+        <AccountUserProfileContent />
       </Container>
     </Fragment>
   );
