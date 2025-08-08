@@ -45,19 +45,6 @@ const BasicSettings = ({ title }: IBasicSettingsProps) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="py-2 text-secondary-foreground font-normal">
-                Password
-              </TableCell>
-              <TableCell className="py-2 text-secondary-foreground font-normal">
-                Password last changed 2 months ago
-              </TableCell>
-              <TableCell className="py-2 text-end">
-                <Button variant="ghost" mode="icon">
-                  <SquarePen size={16} className="text-blue-500" />
-                </Button>
-              </TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell className="py-3.5text-secondary-foreground font-normal">
                 2FA
               </TableCell>
@@ -108,80 +95,6 @@ const BasicSettings = ({ title }: IBasicSettingsProps) => {
                     <img
                       src={toAbsoluteUrl('/media/brand-logos/apple-white.svg')}
                       className="light:hidden h-4"
-                      alt="product logo"
-                    />
-                  </Link>
-                </div>
-              </TableCell>
-              <TableCell className="py-2 text-end">
-                <Button variant="ghost" mode="icon">
-                  <SquarePen size={16} className="text-blue-500" />
-                </Button>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="py-3text-secondary-foreground font-normal">
-                Team Account
-              </TableCell>
-              <TableCell className="py-3 text-secondary-foreground font-normal">
-                To be set
-              </TableCell>
-              <TableCell className="py-3 text-end">
-                <Button mode="link" size="sm" underlined="dashed" asChild>
-                  <Link to="#">Setup</Link>
-                </Button>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="py-2 text-secondary-foreground font-normal">
-                Social Profiles
-              </TableCell>
-              <TableCell className="py-0.5">
-                <div className="flex items-center gap-2.5">
-                  <Link
-                    to="#"
-                    className="flex items-center justify-center size-8 bg-background rounded-full border border-input"
-                  >
-                    <img
-                      src={toAbsoluteUrl('/media/brand-logos/linkedin.svg')}
-                      className="size-4"
-                      alt="product logo"
-                    />
-                  </Link>
-                  <Link
-                    to="#"
-                    className="flex items-center justify-center size-8 bg-background rounded-full border border-input"
-                  >
-                    <img
-                      src={toAbsoluteUrl(
-                        '/media/brand-logos/twitch-purple.svg',
-                      )}
-                      className="size-4"
-                      alt="product logo"
-                    />
-                  </Link>
-                  <Link
-                    to="#"
-                    className="flex items-center justify-center size-8 bg-background rounded-full border border-input"
-                  >
-                    <img
-                      src={toAbsoluteUrl('/media/brand-logos/x.svg')}
-                      className="dark:hidden size-4"
-                      alt="product logo"
-                    />
-                    <img
-                      src={toAbsoluteUrl('/media/brand-logos/x-dark.svg')}
-                      className="light:hidden size-4"
-                      alt="product logo"
-                    />
-                  </Link>
-                  <Link
-                    to="#"
-                    className="flex items-center justify-center size-8 bg-background rounded-full border border-input"
-                  >
-                    <img
-                      src={toAbsoluteUrl('/media/brand-logos/dribbble.svg')}
-                      className="size-4"
                       alt="product logo"
                     />
                   </Link>
