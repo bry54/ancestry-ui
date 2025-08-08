@@ -24,9 +24,9 @@ export function SpecialOffers() {
         <div className="lg:col-span-1">
           <div className="grid sm:grid-cols-2 gap-5 items-stretch">
             <Card2
-              logo='4.png'
-              title='Nike Dunk Low'
-              total='$110.00'
+              logo="4.png"
+              title="Nike Dunk Low"
+              total="$110.00"
               bgColor="bg-green-50 dark:bg-green-950/30"
               borderColor="border-green-200 dark:border-green-950"
             />
@@ -39,7 +39,7 @@ export function SpecialOffers() {
             />
           </div>
         </div>
-      </div>  
+      </div>
     </div>
   );
 }

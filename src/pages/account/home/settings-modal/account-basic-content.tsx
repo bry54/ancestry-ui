@@ -1,33 +1,15 @@
+;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import { AccountSettingsSidebar } from '@/pages/account/home/settings-sidebar';
-import {
-  AdvancedSettingsAddress,
-  AdvancedSettingsAppearance,
-  AdvancedSettingsNotifications,
-  AdvancedSettingsPreferences,
-  AuthEmail,
-  AuthPassword,
-  AuthSingleSingOn,
-  AuthSocialSignIn,
-  AuthTwoFactor,
-  BasicSettings,
-  DeleteAccount,
-  ExternalServicesIntegrations,
-  ExternalServicesManageApi,
-} from '@/pages/account/home/settings-sidebar/components';
+import { AdvancedSettingsAddress, AdvancedSettingsAppearance, AdvancedSettingsNotifications, AdvancedSettingsPreferences, AuthEmail, AuthPassword, AuthSingleSingOn, AuthSocialSignIn, AuthTwoFactor, BasicSettings, DeleteAccount, ExternalServicesIntegrations, ExternalServicesManageApi } from '@/pages/account/home/settings-sidebar/components';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useViewport } from '@/hooks/use-viewport';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Scrollspy } from '@/components/ui/scrollspy';
+
 
 interface IModalProfileProps {
   open: boolean;

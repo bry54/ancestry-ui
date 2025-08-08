@@ -1,7 +1,5 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import { inputVariants } from '@/components/ui/input';
 import type { VariantProps } from 'class-variance-authority';
 import {
   composeRenderProps,
@@ -16,8 +14,14 @@ import {
   TimeField as TimeFieldRa,
   TimeValue as TimeValueRa,
 } from 'react-aria-components';
+import { cn } from '@/lib/utils';
+import { inputVariants } from '@/components/ui/input';
 
-function DateField<T extends DateValueRa>({ className, children, ...props }: DateFieldProps<T>) {
+function DateField<T extends DateValueRa>({
+  className,
+  children,
+  ...props
+}: DateFieldProps<T>) {
   return (
     <DateFieldRa
       className={composeRenderProps(className, (className) => cn(className))}

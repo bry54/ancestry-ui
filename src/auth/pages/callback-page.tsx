@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/auth/context/auth-context';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+
 /**
  * Callback page for OAuth authentication redirects.
  * This component handles the authentication flow after a user signs in with a third-party provider.

@@ -1,3 +1,4 @@
+;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { CardAuthor, CardAuthorRow } from '@/partials/cards';
@@ -5,14 +6,9 @@ import { LayoutGrid, List, Search, Settings2 } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+
 
 export interface IAuthorContentAvatar {
   className: string;

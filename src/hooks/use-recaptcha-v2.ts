@@ -1,7 +1,9 @@
+;
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef } from 'react';
+
 
 type ReCaptchaInstance = {
   ready: (callback: () => void) => void;

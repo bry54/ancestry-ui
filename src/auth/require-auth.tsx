@@ -3,6 +3,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { ScreenLoader } from '@/components/common/screen-loader';
 import { useAuth } from './context/auth-context';
 
+
 /**
  * Component to protect routes that require authentication.
  * If user is not authenticated, redirects to the login page.

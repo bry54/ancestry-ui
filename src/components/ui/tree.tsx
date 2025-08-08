@@ -2,10 +2,10 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '@/lib/utils';
 import { ItemInstance } from '@headless-tree/core';
 import { ChevronDownIcon, SquareMinus, SquarePlus } from 'lucide-react';
 import { Slot as SlotPrimitive } from 'radix-ui';
+import { cn } from '@/lib/utils';
 
 type ToggleIconType = 'chevron' | 'plus-minus';
 

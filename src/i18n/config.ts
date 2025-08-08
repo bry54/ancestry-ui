@@ -1,7 +1,7 @@
 import { LanguageCode } from '@/lib/enums';
 import { toAbsoluteUrl } from '@/lib/helpers';
-import ndMessages from './messages/nd.json';
 import enMessages from './messages/en.json';
+import ndMessages from './messages/nd.json';
 import snMessages from './messages/sn.json';
 import { type Language } from './types';
 

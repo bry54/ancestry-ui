@@ -1,13 +1,8 @@
+;
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, {
-  ChangeEvent,
-  DragEvent,
-  FC,
-  useCallback,
-  useRef,
-  useState,
-} from 'react';
+import React, { ChangeEvent, DragEvent, FC, useCallback, useRef, useState } from 'react';
 import { getAcceptTypeString, getListFiles, openFileDialog } from './utils';
+
 
 interface ImageInputFile {
   dataURL?: string;

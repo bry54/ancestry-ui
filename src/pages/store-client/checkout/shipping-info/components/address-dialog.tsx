@@ -1,14 +1,31 @@
-"use client";
+'use client';
 
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogBody, DialogClose, DialogDescription } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { addressSchema, AddressFormValues } from './forms';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import CountryCombobox from './country-combobox';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import React, { useEffect } from 'react';
+import { AddressFormValues, addressSchema } from './forms';
 
 interface AddressDialogProps {
   open: boolean;
@@ -84,7 +101,10 @@ export function AddressDialog({
         </DialogHeader>
         <DialogBody>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="block w-full space-y-5">
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="block w-full space-y-5"
+            >
               {/* Address Name */}
               <FormField
                 control={form.control}
@@ -177,7 +197,12 @@ export function AddressDialog({
                   name="apartment"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Address Line 2 <span className="text-xs text-muted-foreground">(optional)</span></FormLabel>
+                      <FormLabel>
+                        Address Line 2{' '}
+                        <span className="text-xs text-muted-foreground">
+                          (optional)
+                        </span>
+                      </FormLabel>
                       <FormControl>
                         <Input {...field} id="apartment" />
                       </FormControl>
@@ -208,7 +233,10 @@ export function AddressDialog({
                     <FormItem>
                       <FormLabel>Country</FormLabel>
                       <FormControl>
-                        <CountryCombobox value={field.value} onChange={field.onChange} />
+                        <CountryCombobox
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -216,7 +244,7 @@ export function AddressDialog({
                 />
               </div>
               {/* Zip/Postal Code */}
-              <div className="grid grid-cols-2 gap-4">                  
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="postalCode"

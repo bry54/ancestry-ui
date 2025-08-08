@@ -118,7 +118,7 @@ export function StoreClientCartSheet({
                       </Select>
 
                       <Button size="sm" variant="outline" mode="icon">
-                        <TrashIcon/>
+                        <TrashIcon />
                       </Button>
                     </div>
 
@@ -154,5 +154,3 @@ export function StoreClientCartSheet({
     </Sheet>
   );
 }
-
-

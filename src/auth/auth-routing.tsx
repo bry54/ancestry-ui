@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { authRoutes } from './auth-routes';
 
+
 /**
  * Handles all authentication related routes.
  * This component is mounted at /auth/* in the main application router.

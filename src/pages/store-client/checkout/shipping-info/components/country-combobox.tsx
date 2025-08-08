@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Button, ButtonArrow } from "@/components/ui/button";
+import * as React from 'react';
+import { Button, ButtonArrow } from '@/components/ui/button';
 import {
   Command,
   CommandCheck,
@@ -10,13 +10,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const countryFlags = [
   { code: 'AF', name: 'Afghanistan', flag: '/media/flags/afghanistan.svg' },
@@ -249,10 +249,15 @@ type CountryComboboxProps = {
   onChange: (value: string) => void;
 };
 
-export default function CountryCombobox({ value, onChange }: CountryComboboxProps) {
+export default function CountryCombobox({
+  value,
+  onChange,
+}: CountryComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
-  const selectedCountry = countryFlags.find((country) => country.code === value);
+  const selectedCountry = countryFlags.find(
+    (country) => country.code === value,
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -292,7 +297,7 @@ export default function CountryCombobox({ value, onChange }: CountryComboboxProp
                     key={country.code}
                     value={country.code}
                     onSelect={(currentValue) => {
-                      onChange(currentValue === value ? "" : currentValue);
+                      onChange(currentValue === value ? '' : currentValue);
                       setOpen(false);
                     }}
                   >
