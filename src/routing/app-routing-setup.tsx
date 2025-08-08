@@ -93,6 +93,7 @@ import {
   WishlistPage,
 } from '@/pages/store-client';
 import { Navigate, Route, Routes } from 'react-router';
+import { AccountHomePage } from '@/pages/user/account';
 
 export function AppRoutingSetup() {
   return (
@@ -101,6 +102,7 @@ export function AppRoutingSetup() {
         <Route element={<Demo1Layout />}>
           <Route path="/" element={<Demo1LightSidebarPage />} />
           <Route path="/user/profiles" element={<NetworkMiniCardsPage />} />
+          <Route path="/user/account" element={<AccountHomePage />} />
           <Route path="/user/connections" element={<>Connections Page</>} />
           <Route
             path="/network/tree-explorer"

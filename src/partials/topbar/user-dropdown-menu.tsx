@@ -96,7 +96,7 @@ export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
         {/* Menu Items */}
         <DropdownMenuItem asChild>
           <Link
-            to="/public-profile/profiles/default"
+            to="/user/account"
             className="flex items-center gap-2"
           >
             <IdCard />
