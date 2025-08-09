@@ -3,14 +3,17 @@ import { Empty, Spin } from 'antd';
 import axios from 'axios';
 import { useIntl } from 'react-intl';
 import { Any } from '@/lib/interfaces';
-import { ResponsiveWordCloud } from '@/components/visuals/ResponsiveWordCloud/ResponsiveWordCloud.tsx';
+import {
+  ResponsiveWordCloud,
+  WordData,
+} from '@/components/visuals/ResponsiveWordCloud/ResponsiveWordCloud.tsx';
 
 export function NameDistributionContent() {
   const API_URL = import.meta.env.VITE_API_URL;
   const FULL_URL = `${API_URL}/connections-map/name-distribution`;
 
   const intl = useIntl();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<WordData[]>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 

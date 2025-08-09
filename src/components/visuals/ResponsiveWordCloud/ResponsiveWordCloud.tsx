@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import cloud from 'd3-cloud';
 import { useContainerSize } from '@/hooks/use-container-size';
-import type { WordData } from './data';
 
-// --- COMPONENT PROPS ---
+export interface WordData {
+  text: string;
+  size: number;
+}
+
 interface ResponsiveWordCloudProps {
   data: WordData[];
 }
@@ -18,12 +21,17 @@ export const ResponsiveWordCloud: React.FC<ResponsiveWordCloudProps> = ({
   useEffect(() => {
     if (!data || width === 0 || height === 0) return;
 
-    const maxVal = d3.max(data, (d) => d.value) || 1;
+    const maxVal = d3.max(data, (d: WordData) => d.size) || 1;
     const fontSizeScale = d3.scaleSqrt().domain([0, maxVal]).range([10, 60]);
 
     const layout = cloud()
       .size([width, height])
-      .words(data.map((d) => ({ text: d.text, size: fontSizeScale(d.value) })))
+      .words(
+        data.map((d: WordData) => ({
+          text: d.text,
+          size: fontSizeScale(d.size),
+        })),
+      )
       .padding(5)
       .rotate(() => (~~(Math.random() * 6) - 3) * 30) // Random rotation
       .font('Impact') // A classic word cloud font
