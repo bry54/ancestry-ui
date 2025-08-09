@@ -12,13 +12,13 @@ The component requires a `data` prop containing `nodes` and `links`.
 -   `links`: An array of objects, where `source` and `target` refer to node `id`s. The `value` property is used to determine the thickness of the arc.
 
 ```tsx
-import { ResponsiveArcDiagram } from '@/components/visuals/ResponsiveArcDiagram/ResponsiveArcDiagram';
-import { characterConnections } from '@/components/visuals/ResponsiveArcDiagram/data';
+import {ResponsiveArcDiagram1} from '@/components/visuals/ResponsiveArcDiagram1/ResponsiveArcDiagram1';
+import {characterConnections} from '@/components/visuals/ResponsiveArcDiagram1/data';
 
 const MyPage = () => (
-  <div className="w-full h-[400px]">
-    <ResponsiveArcDiagram data={characterConnections} />
-  </div>
+    <div className="w-full h-[400px]">
+        <ResponsiveArcDiagram1 data={characterConnections}/>
+    </div>
 );
 ```
 
