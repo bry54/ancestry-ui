@@ -56,7 +56,7 @@ const ResponsiveArcDiagram: React.FC<ArcDiagramProps> = ({ data }) => {
 
     const g = svg
       .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+      .attr('transform', `translate(${margin.left},${0 - margin.top * 5})`);
 
     // Same D3 logic as before...
     const nodes = [...data.nodes].sort((a, b) => a.id.localeCompare(b.id));
@@ -118,7 +118,7 @@ const ResponsiveArcDiagram: React.FC<ArcDiagramProps> = ({ data }) => {
       .join('text')
       .attr(
         'transform',
-        (d) => `translate(${x(d.id)},${innerHeight / 2})rotate(-45)`,
+        (d) => `translate(${x(d.id)},${innerHeight / 2 - 10})rotate(-45)`, //-10 to add some margin on the node labels
       )
       .attr('dy', '0.31em')
       .attr('text-anchor', 'start')

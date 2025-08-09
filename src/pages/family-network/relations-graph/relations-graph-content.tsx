@@ -49,7 +49,7 @@ export function RelationsGraphContent() {
 
   return (
     <Fragment>
-      <div className="w-full h-120 md:h-136 bg-white rounded-lg p-2">
+      <div className="w-full h-120 md:h-180 bg-white rounded-lg p-2">
         <ResponsiveArcDiagram data={data} />
       </div>
     </Fragment>
