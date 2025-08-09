@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useLayout } from '@/layouts/context';
 import { Helmet } from 'react-helmet-async';
 import { Outlet, useLocation } from 'react-router-dom';
 import { MENU_SIDEBAR } from '@/config/menu.config';
@@ -15,6 +16,8 @@ export function Demo1Layout() {
   const { getCurrentItem } = useMenu(pathname);
   const item = getCurrentItem(MENU_SIDEBAR);
   const { settings, setOption } = useSettings();
+  const { isFooterVisible, setFooterVisibility } = useLayout();
+  const location = useLocation();
 
   useEffect(() => {
     const bodyClass = document.body.classList;
@@ -54,6 +57,18 @@ export function Demo1Layout() {
     };
   }, []); // Runs only once on mount
 
+  useEffect(() => {
+    const checkPage = () => {
+      if (location.pathname.startsWith('/network/')) {
+        setFooterVisibility(false);
+      } else {
+        setFooterVisibility(true);
+      }
+    };
+
+    checkPage();
+  }, [location]); // runs whenever the route changes
+
   return (
     <>
       <Helmet>
@@ -69,7 +84,7 @@ export function Demo1Layout() {
           <Outlet />
         </main>
 
-        <Footer />
+        {isFooterVisible && <Footer />}
       </div>
     </>
   );

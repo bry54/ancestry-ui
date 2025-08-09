@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useState } from 'react';
+import { Empty, Spin } from 'antd';
 import axios from 'axios';
 import { useIntl } from 'react-intl';
-import { ResponsiveBarChart } from '@/components/visuals/ResponsiveBarChart';
-import { wordCloudData } from '@/components/visuals/ResponsiveWordCloud/data.ts';
+import { Any } from '@/lib/interfaces';
 import { ResponsiveWordCloud } from '@/components/visuals/ResponsiveWordCloud/ResponsiveWordCloud.tsx';
 
 export function NameDistributionContent() {
@@ -19,7 +19,7 @@ export function NameDistributionContent() {
       try {
         const result = await axios.get(FULL_URL);
         setData(result.data);
-      } catch (e) {
+      } catch (e: Any) {
         setError(e.message);
       } finally {
         setLoading(false);
@@ -29,10 +29,26 @@ export function NameDistributionContent() {
     fetchData();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="w-full h-120 md:h-136 bg-white rounded-lg shadow p-2">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="w-full h-120 md:h-136 bg-white rounded-lg shadow p-2 mt-2">
+        <Empty description={<span>{error}</span>} />
+      </div>
+    );
+  }
+
   return (
     <Fragment>
-      <div className="w-full h-80 md:h-96 bg-white rounded-lg shadow p-2">
-        {data && <ResponsiveWordCloud data={data} />}
+      <div className="w-full h-120 md:h-136 bg-white rounded-lg p-2">
+        <ResponsiveWordCloud data={data} />
       </div>
     </Fragment>
   );

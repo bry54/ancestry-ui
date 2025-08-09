@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import * as d3 from 'd3';
 import { useContainerSize } from '@/hooks/use-container-size';
-import type { HierarchyPointNode as HierarchyData } from './data/tree-data';
+import type { TreeNode as HierarchyData } from './data/tree-data';
 
 // --- COMPONENT PROPS ---
 interface ResponsiveTreeChartProps {
@@ -10,7 +10,9 @@ interface ResponsiveTreeChartProps {
 
 const MARGINS = { top: 20, right: 150, bottom: 20, left: 50 };
 
-export const ResponsiveTreeChart: React.FC<ResponsiveTreeChartProps> = ({ data }) => {
+export const ResponsiveTreeChart: React.FC<ResponsiveTreeChartProps> = ({
+  data,
+}) => {
   // 1. Measure the container
   const { ref, width, height } = useContainerSize();
 
@@ -53,12 +55,13 @@ export const ResponsiveTreeChart: React.FC<ResponsiveTreeChartProps> = ({ data }
               key={i}
               // The d3.linkHorizontal generator creates the "d" attribute for the path
               d={
-                d3.linkHorizontal()
-                  .x(d => d[0])
-                  .y(d => d[1])([
-                    [link.source.y, link.source.x],
-                    [link.target.y, link.target.x]
-                  ]) || ''
+                d3
+                  .linkHorizontal()
+                  .x((d) => d[0])
+                  .y((d) => d[1])([
+                  [link.source.y, link.source.x],
+                  [link.target.y, link.target.x],
+                ]) || ''
               }
               fill="none"
               stroke="gray"

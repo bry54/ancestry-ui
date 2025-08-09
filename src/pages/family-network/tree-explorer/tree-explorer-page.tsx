@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import {
   Toolbar,
   ToolbarActions,
@@ -6,7 +6,6 @@ import {
   ToolbarHeading,
   ToolbarPageTitle,
 } from '@/partials/common/toolbar';
-import { useSettings } from '@/providers/settings-provider';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -19,8 +18,6 @@ import { Container } from '@/components/common/container';
 import { TreeExplorerContent } from '.';
 
 export function TreeExplorerPage() {
-  const {} = useSettings();
-
   return (
     <Fragment>
       <Container>

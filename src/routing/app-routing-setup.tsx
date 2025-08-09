@@ -1,6 +1,7 @@
 import { AuthRouting } from '@/auth/auth-routing';
 import { RequireAuth } from '@/auth/require-auth';
 import { ErrorRouting } from '@/errors/error-routing';
+import { LayoutProvider } from '@/layouts/context';
 import { Demo1Layout } from '@/layouts/demo1/layout';
 import {
   AccountActivityPage,
@@ -105,7 +106,13 @@ export function AppRoutingSetup() {
   return (
     <Routes>
       <Route element={<RequireAuth />}>
-        <Route element={<Demo1Layout />}>
+        <Route
+          element={
+            <LayoutProvider>
+              <Demo1Layout />
+            </LayoutProvider>
+          }
+        >
           <Route path="/" element={<Demo1LightSidebarPage />} />
           <Route path="/user/profiles" element={<NetworkMiniCardsPage />} />
           <Route path="/user/account" element={<AccountHomePage />} />

@@ -1,115 +1,180 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { useContainerSize } from '@/hooks/use-container-size';
-import type { HierarchyPointNode as HierarchyData } from '../data/tree-data';
+import { Any } from '@/lib/interfaces';
 
-// --- COMPONENT PROPS ---
-interface ResponsiveCollapsibleTreeProps {
-  data: HierarchyData;
+export interface TreeNode {
+  name: string;
+  children?: TreeNode[];
 }
 
-const MARGINS = { top: 20, right: 150, bottom: 20, left: 50 };
+interface ResponsiveCollapsibleTreeProps {
+  data: TreeNode;
+}
 
-export const ResponsiveCollapsibleTree: React.FC<ResponsiveCollapsibleTreeProps> = ({ data }) => {
-  // 1. Measure the container
-  const { ref, width, height } = useContainerSize();
-  
-  // 2. Manage the tree data state
-  // We use a state variable to hold the hierarchy, so we can update it on user interaction.
-  const [rootNode, setRootNode] = useState<d3.HierarchyPointNode<HierarchyData> | null>(null);
+const ResponsiveCollapsibleTree: React.FC<ResponsiveCollapsibleTreeProps> = ({
+  data,
+}) => {
+  const svgRef = useRef<SVGSVGElement>(null);
 
-  // Initialize the hierarchy when the component mounts or data changes
   useEffect(() => {
+    if (!data || !svgRef.current) return;
+
+    const width = 1200;
+    const marginTop = 10;
+    const marginRight = 10;
+    const marginBottom = 10;
+    const marginLeft = 100;
+
     const root = d3.hierarchy(data);
-    // Start with the first level of children collapsed
-    root.children?.forEach(collapse);
-    setRootNode(root);
+    const dx = 20;
+    const dy = (width - marginRight - marginLeft) / (1 + root.height);
+
+    const tree = d3.tree().nodeSize([dx, dy]);
+    const diagonal = d3
+      .linkHorizontal()
+      .x((d: Any) => d.y)
+      .y((d: Any) => d.x);
+
+    const svg = d3
+      .select(svgRef.current)
+      .attr('width', width)
+      .attr('height', dx)
+      .attr('viewBox', [-marginLeft, -marginTop, width, dx])
+      .attr('style', 'max-width: 100%; height: auto; font: 10px sans-serif;');
+
+    const gLink = svg
+      .append('g')
+      .attr('fill', 'none')
+      .attr('stroke', '#555')
+      .attr('stroke-opacity', 0.4)
+      .attr('stroke-width', 1.5);
+
+    const gNode = svg
+      .append('g')
+      .attr('cursor', 'pointer')
+      .attr('pointer-events', 'all');
+
+    function update(source: Any) {
+      const duration = 250;
+      const nodes = root.descendants().reverse();
+      const links = root.links();
+
+      // Compute the new tree layout.
+      tree(root);
+
+      let left = root;
+      let right = root;
+      root.eachBefore((node) => {
+        if (node.x < left.x) left = node;
+        if (node.x > right.x) right = node;
+      });
+
+      const height = right.x - left.x + marginTop + marginBottom;
+
+      const transition = svg
+        .transition()
+        .duration(duration)
+        .attr('height', height)
+        .attr('viewBox', [-marginLeft, left.x - marginTop, width, height])
+        .tween(
+          'resize',
+          window.ResizeObserver ? null : () => () => svg.dispatch('toggle'),
+        );
+
+      // Update the nodes…
+      const node = gNode.selectAll('g').data(nodes, (d: Any) => d.id);
+
+      // Enter any new nodes at the parent's previous position.
+      const nodeEnter = node
+        .enter()
+        .append('g')
+        .attr('transform', `translate(${source.y0},${source.x0})`)
+        .attr('fill-opacity', 0)
+        .attr('stroke-opacity', 0)
+        .on('click', (event, d) => {
+          d.children = d.children ? null : d._children;
+          update(d);
+        });
+
+      nodeEnter
+        .append('circle')
+        .attr('r', 2.5)
+        .attr('fill', (d: Any) => (d._children ? '#555' : '#999'))
+        .attr('stroke-width', 10);
+
+      nodeEnter
+        .append('text')
+        .attr('dy', '0.31em')
+        .attr('x', (d: Any) => (d._children ? -6 : 6))
+        .attr('text-anchor', (d: Any) => (d._children ? 'end' : 'start'))
+        .text((d: Any) => d.data.name)
+        .clone(true)
+        .lower()
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-width', 3)
+        .attr('stroke', 'white');
+
+      // Transition nodes to their new position.
+      node
+        .merge(nodeEnter)
+        .transition(transition)
+        .attr('transform', (d: Any) => `translate(${d.y},${d.x})`)
+        .attr('fill-opacity', 1)
+        .attr('stroke-opacity', 1);
+
+      // Transition exiting nodes to the parent's new position.
+      node
+        .exit()
+        .transition(transition)
+        .remove()
+        .attr('transform', `translate(${source.y},${source.x})`)
+        .attr('fill-opacity', 0)
+        .attr('stroke-opacity', 0);
+
+      // Update the links…
+      const link = gLink.selectAll('path').data(links, (d: Any) => d.target.id);
+
+      // Enter any new links at the parent's previous position.
+      const linkEnter = link
+        .enter()
+        .append('path')
+        .attr('d', () => {
+          const o = { x: source.x0, y: source.y0 };
+          return diagonal({ source: o, target: o });
+        });
+
+      // Transition links to their new position.
+      link.merge(linkEnter).transition(transition).attr('d', diagonal);
+
+      // Transition exiting nodes to the parent's new position.
+      link
+        .exit()
+        .transition(transition)
+        .remove()
+        .attr('d', () => {
+          const o = { x: source.x, y: source.y };
+          return diagonal({ source: o, target: o });
+        });
+
+      // Stash the old positions for transition.
+      root.eachBefore((d: Any) => {
+        d.x0 = d.x;
+        d.y0 = d.y;
+      });
+    }
+
+    root.x0 = dx / 2;
+    root.y0 = 0;
+    root.descendants().forEach((d: any, i) => {
+      d.id = i;
+      d._children = d.children;
+      if (d.depth && d.data.name.length !== 7) d.children = null;
+    });
+
+    update(root);
   }, [data]);
 
-  // Function to toggle collapse/expand
-  const handleNodeClick = (node: d3.HierarchyPointNode<HierarchyData>) => {
-    if (node.children) {
-      collapse(node);
-    } else {
-      expand(node);
-    }
-    // Trigger a re-render by creating a new hierarchy object
-    setRootNode(rootNode ? rootNode.copy() : null);
-  };
-
-  // D3 convention: store collapsed children in `_children`
-  const collapse = (node: d3.HierarchyPointNode<HierarchyData>) => {
-    if (node.children) {
-      node._children = node.children;
-      node.children = undefined;
-    }
-  };
-
-  const expand = (node: d3.HierarchyPointNode<HierarchyData>) => {
-    if (node._children) {
-      node.children = node._children;
-      node._children = undefined;
-    }
-  };
-
-  // 3. Memoize D3 layout calculations
-  const { nodes, links } = useMemo(() => {
-    if (!rootNode || width === 0 || height === 0) {
-      return { nodes: [], links: [] };
-    }
-
-    const boundedWidth = width - MARGINS.left - MARGINS.right;
-    const boundedHeight = height - MARGINS.top - MARGINS.bottom;
-
-    const treeLayout = d3.tree().size([boundedHeight, boundedWidth]);
-    const tree = treeLayout(rootNode);
-
-    return { nodes: tree.descendants(), links: tree.links() };
-  }, [rootNode, width, height]);
-
-  return (
-    <div ref={ref} className="w-full h-full">
-      <svg width={width} height={height}>
-        <g transform={`translate(${MARGINS.left}, ${MARGINS.top})`}>
-          {/* Render Links */}
-          {links.map((link, i) => (
-            <path
-              key={i}
-              d={d3.linkHorizontal().x(d => d[0]).y(d => d[1])([[link.source.y, link.source.x], [link.target.y, link.target.x]]) || ''}
-              fill="none"
-              stroke="gray"
-              strokeWidth={1}
-            />
-          ))}
-
-          {/* Render Nodes */}
-          {nodes.map((node, i) => (
-            <g
-              key={i}
-              transform={`translate(${node.y}, ${node.x})`}
-              style={{ cursor: 'pointer' }}
-              onClick={() => handleNodeClick(node)}
-            >
-              <circle
-                r={5}
-                // Fill is white if collapsed, steelblue if expanded
-                fill={node._children ? '#fff' : 'steelblue'}
-                stroke="steelblue"
-                strokeWidth={2}
-              />
-              <text
-                dy=".31em"
-                x={node.children || node._children ? -10 : 10}
-                textAnchor={node.children || node._children ? 'end' : 'start'}
-                fontSize={12}
-                fill="#333"
-              >
-                {node.data.name}
-              </text>
-            </g>
-          ))}
-        </g>
-      </svg>
-    </div>
-  );
+  return <svg ref={svgRef}></svg>;
 };
+
+export default ResponsiveCollapsibleTree;

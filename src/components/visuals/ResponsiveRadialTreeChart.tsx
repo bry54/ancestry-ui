@@ -1,14 +1,16 @@
 import React, { useMemo } from 'react';
 import * as d3 from 'd3';
 import { useContainerSize } from '@/hooks/use-container-size';
-import type { HierarchyPointNode as HierarchyData } from './data/tree-data';
+import type { TreeNode as HierarchyData } from './data/tree-data';
 
 // --- COMPONENT PROPS ---
 interface ResponsiveRadialTreeChartProps {
   data: HierarchyData;
 }
 
-export const ResponsiveRadialTreeChart: React.FC<ResponsiveRadialTreeChartProps> = ({ data }) => {
+export const ResponsiveRadialTreeChart: React.FC<
+  ResponsiveRadialTreeChartProps
+> = ({ data }) => {
   // 1. Measure the container
   const { ref, width, height } = useContainerSize();
 
@@ -49,10 +51,13 @@ export const ResponsiveRadialTreeChart: React.FC<ResponsiveRadialTreeChartProps>
               key={i}
               // The d3.linkRadial generator creates the "d" attribute for the path
               d={
-                d3.linkRadial()
+                d3
+                  .linkRadial()
                   .angle((d: any) => d.x)
-                  .radius((d: any) => d.y)
-                  ({ source: link.source, target: link.target }) || ''
+                  .radius((d: any) => d.y)({
+                  source: link.source,
+                  target: link.target,
+                }) || ''
               }
               fill="none"
               stroke="gray"
