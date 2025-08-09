@@ -49,7 +49,7 @@ export function TreeExplorerContent() {
 
   return (
     <Fragment>
-      <div className="w-full h-120 md:h-136 bg-white rounded-lg p-2">
+      <div className="w-full h-120 md:h-150 bg-white rounded-lg p-2">
         <ResponsiveCollapsibleTree data={data} />
       </div>
     </Fragment>

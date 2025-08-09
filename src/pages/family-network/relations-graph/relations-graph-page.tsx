@@ -26,9 +26,9 @@ export function RelationsGraphPage() {
       <Container>
         <Toolbar>
           <ToolbarHeading>
-            <ToolbarPageTitle text="Tree Explorer" />
+            <ToolbarPageTitle text="Family Relationship Map" />
             <ToolbarDescription>
-              Explore your family tree nodes
+              Explore how connections are made in your family
             </ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
