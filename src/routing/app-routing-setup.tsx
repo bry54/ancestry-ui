@@ -99,6 +99,8 @@ import {
 } from '@/pages/store-client';
 import { ChangeLogsPage, HelpSupportPage } from '@/pages/system';
 import { AccountHomePage } from '@/pages/user/account';
+import { AddPersonPage } from '@/pages/user/profiles/add-person';
+import { ProfilesListPage } from '@/pages/user/profiles/profiles-list';
 import { UserManagementPage } from '@/pages/user/user-management';
 import { Navigate, Route, Routes } from 'react-router';
 
@@ -114,7 +116,8 @@ export function AppRoutingSetup() {
           }
         >
           <Route path="/" element={<Demo1LightSidebarPage />} />
-          <Route path="/user/profiles" element={<NetworkMiniCardsPage />} />
+          <Route path="/user/profiles" element={<ProfilesListPage />} />
+          <Route path="/user/profiles/add" element={<AddPersonPage />} />
           <Route path="/user/account" element={<AccountHomePage />} />
           <Route path="/user/connections" element={<>Connections Page</>} />
           <Route path="/network/tree-explorer" element={<TreeExplorerPage />} />

@@ -15,7 +15,7 @@ export function Demo1Layout() {
   const { pathname } = useLocation();
   const { getCurrentItem } = useMenu(pathname);
   const item = getCurrentItem(MENU_SIDEBAR);
-  const { settings, setOption } = useSettings();
+  const { settings, setOption, storeOption } = useSettings();
   const { isFooterVisible, setFooterVisibility } = useLayout();
   const location = useLocation();
 
@@ -61,6 +61,7 @@ export function Demo1Layout() {
     const checkPage = () => {
       if (location.pathname.startsWith('/network/')) {
         setFooterVisibility(false);
+        storeOption('layouts.demo1.sidebarCollapse', true);
       } else {
         setFooterVisibility(true);
       }

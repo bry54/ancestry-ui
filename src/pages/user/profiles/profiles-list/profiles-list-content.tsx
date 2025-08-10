@@ -28,7 +28,7 @@ export interface IMiniCardsContentItem {
 }
 type IMiniCardsContentItems = Array<IMiniCardsContentItem>;
 
-export function NetworkMiniCardsContent() {
+export function ProfilesListContent() {
   const [searchInput, setSearchInput] = useState('');
 
   const items: IMiniCardsContentItems = [
