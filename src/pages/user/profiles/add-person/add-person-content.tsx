@@ -8,8 +8,8 @@ export function AddPersonContent() {
   const [selectedProductId] = useState('123');
   const navigate = useNavigate();
 
-  const handleAddPerson = ({ productId }: { productId: string }) => {
-    console.log('Added:', productId);
+  const handleAddPerson = () => {
+    console.log('Added');
     navigate(-1);
   };
 

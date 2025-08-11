@@ -11,7 +11,7 @@ import {
   UserModel,
 } from '@/lib/interfaces';
 
-const API_URL = import.meta.env.VITE_API_URL;
+export const API_URL = import.meta.env.VITE_API_URL;
 const LOGIN_URL = `${API_URL}/auth/login`;
 const REGISTER_URL = `${API_URL}/auth/register`;
 const RESET_PASSWORD_URL = `${API_URL}/auth/reset-password`;

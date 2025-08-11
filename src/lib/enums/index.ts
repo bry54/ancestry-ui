@@ -25,3 +25,15 @@ export enum OAuthProvider {
   DISCORD = 'discord',
   SLACK = 'slack',
 }
+
+export enum LifeStatus {
+  ALIVE = 'ALIVE',
+  DECEASED = 'DECEASED',
+  UNKNOWN = 'UNKNOWN'
+}
+
+export enum Gender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  OTHER = 'OTHER',
+}
