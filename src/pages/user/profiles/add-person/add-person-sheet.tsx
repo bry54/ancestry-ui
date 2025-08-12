@@ -20,8 +20,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx';
 import { Separator } from '@/components/ui/separator.tsx';
 import { Sheet, SheetBody, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { useAuth } from '@/auth/context/auth-context.ts';
-import { UserModel } from '@/lib/interfaces';
 
 
 interface AddPersonSheetProps {
@@ -31,36 +29,24 @@ interface AddPersonSheetProps {
   addPerson: () => void;
 }
 
-interface StateDates {
-  dateOfBirth: Date | undefined;
-  dateOfDeath: Date | undefined;
-}
-
 interface IPlace {
-  "city": string | undefined;
-  "country": string | undefined;
+  city: string | undefined;
+  country: string | undefined;
 }
-
 
 interface IAddPersonDto {
   lifeStatus: LifeStatus;
-  firstName: string,
-  lastName: string,
-  dateOfBirth: Date | undefined,
-  dateOfDeath: Date | undefined,
-  gender: string | undefined,
-  otherGivenNames: string[] | undefined,
-  motherName: string | undefined,
-  fatherName: string | undefined,
-  placeOfBirth: IPlace,
-  placeOfDeath: IPlace,
-  userId: string
+  firstName: string;
+  lastName: string;
+  dateOfBirth: Date | undefined;
+  dateOfDeath: Date | undefined;
+  gender: string | undefined;
+  otherGivenNames: string[] | undefined;
+  motherName: string | undefined;
+  fatherName: string | undefined;
+  placeOfBirth: IPlace;
+  placeOfDeath: IPlace;
 }
-
-const defaultStateDates = {
-  dateOfBirth: undefined,
-  dateOfDeath: undefined,
-};
 
 const getAddPersonSchema = () => {
   return z.object({
@@ -74,7 +60,7 @@ const getAddPersonSchema = () => {
     motherName: z.string().optional(),
     fatherName: z.string().optional(),
     gender: z.string().optional(),
-    terms: z.boolean().refine((val) => val === true, {
+    terms: z.boolean().refine((val) => val, {
       message: 'You must agree to the terms and conditions.',
     }),
     lifeStatus: z.string(),
@@ -90,12 +76,10 @@ export function AddPersonSheet({
   onOpenChange,
   addPerson,
 }: AddPersonSheetProps) {
-  const [stateDates, setStateDates] = useState<StateDates>(defaultStateDates);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isDeceased, setIsDeceased] = useState<boolean>(false);
-  const {user} = useAuth();
 
   const form = useForm<AddPersonSchemaType>({
     resolver: zodResolver(getAddPersonSchema()),
@@ -104,29 +88,20 @@ export function AddPersonSheet({
       lastName: '',
       otherGivenNames: '',
       placeOfBirth: '',
-      dateOfBirth: new Date(),
+      dateOfBirth: undefined,
       placeOfDeath: '',
-      dateOfDeath: new Date(),
+      dateOfDeath: undefined,
       lifeStatus: '',
       gender: '',
       terms: false,
     },
   });
 
-  const handleDateChanges = (key: any, value: any) => {
-    setStateDates({
-      ...stateDates,
-      [key]: value,
-    });
-
-    form.setValue(key, value);
-  };
-
   async function onSubmit(values: AddPersonSchemaType) {
     try {
       setIsProcessing(true);
       setError(null);
-      const birthPlaceData = values.placeOfDeath?.split(',');
+      const birthPlaceData = values.placeOfBirth?.split(',');
       const deathPlaceData = values.placeOfDeath?.split(',');
 
       const dto: IAddPersonDto = {
@@ -139,12 +114,15 @@ export function AddPersonSheet({
         otherGivenNames: values.otherGivenNames?.split(','),
         motherName: values.motherName,
         fatherName: values.fatherName,
-        placeOfBirth: birthPlaceData ? { city: birthPlaceData[0], country: birthPlaceData[1]} : {city: undefined, country: undefined},
-        placeOfDeath: deathPlaceData ? { city: deathPlaceData[0], country: deathPlaceData[1]} : {city: undefined, country: undefined},
-        userId: user!.id
+        placeOfBirth: birthPlaceData
+          ? { city: birthPlaceData[0], country: birthPlaceData[1] }
+          : { city: undefined, country: undefined },
+        placeOfDeath: deathPlaceData
+          ? { city: deathPlaceData[0], country: deathPlaceData[1] }
+          : { city: undefined, country: undefined },
       };
-      
-      await axios.post(`${API_URL}/persons`, dto)
+
+      await axios.post(`${API_URL}/persons`, dto);
 
       setSuccessMessage('Person added successfully.');
       addPerson();
@@ -162,7 +140,7 @@ export function AddPersonSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:w-[520px] sm:max-w-none inset-5 start-auto h-auto rounded-lg p-0 [&_[data-slot=sheet-close]]:top-4.5 [&_[data-slot=sheet-close]]:end-5">
+      <SheetContent className="sm:w-[620px] sm:max-w-none inset-5 start-auto h-auto rounded-lg p-0 [&_[data-slot=sheet-close]]:top-4.5 [&_[data-slot=sheet-close]]:end-5">
         <SheetHeader className="border-b py-3.5 px-5 border-border">
           <SheetTitle>Add Person</SheetTitle>
         </SheetHeader>
@@ -266,13 +244,13 @@ export function AddPersonSheet({
                               id="date"
                               className={cn(
                                 'w-full data-[state=open]:border-primary',
-                                !stateDates?.dateOfDeath &&
+                                !form.watch('dateOfDeath') &&
                                   'text-muted-foreground',
                               )}
                             >
                               <CalendarDays className="-ms-0.5" />
-                              {stateDates.dateOfDeath ? (
-                                format(stateDates.dateOfDeath, 'LLL dd, y')
+                              {form.watch('dateOfDeath') ? (
+                                format(form.watch('dateOfDeath')!, 'LLL dd, y')
                               ) : (
                                 <span>Pick a date</span>
                               )}
@@ -282,12 +260,13 @@ export function AddPersonSheet({
                             <Calendar
                               initialFocus
                               mode="single"
-                              defaultMonth={stateDates.dateOfDeath}
-                              selected={stateDates.dateOfDeath}
+                              defaultMonth={form.watch('dateOfDeath')}
+                              selected={form.watch('dateOfDeath')}
                               onSelect={(value) =>
-                                handleDateChanges('dateOfDeath', value)
+                                form.setValue('dateOfDeath', value)
                               }
                               numberOfMonths={1}
+                              disabled={[{ after: new Date() }]}
                             />
                           </PopoverContent>
                         </Popover>
@@ -412,13 +391,13 @@ export function AddPersonSheet({
                             id="date"
                             className={cn(
                               'w-full data-[state=open]:border-primary',
-                              !stateDates?.dateOfBirth &&
+                              !form.watch('dateOfBirth') &&
                                 'text-muted-foreground',
                             )}
                           >
                             <CalendarDays className="-ms-0.5" />
-                            {stateDates.dateOfBirth ? (
-                              format(stateDates.dateOfBirth, 'LLL dd, y')
+                            {form.watch('dateOfBirth') ? (
+                              format(form.watch('dateOfBirth')!, 'LLL dd, y')
                             ) : (
                               <span>Pick a date</span>
                             )}
@@ -428,12 +407,14 @@ export function AddPersonSheet({
                           <Calendar
                             initialFocus
                             mode="single"
-                            defaultMonth={stateDates.dateOfBirth}
-                            selected={stateDates.dateOfBirth}
-                            onSelect={(value) =>
-                              handleDateChanges('dateOfBirth', value)
-                            }
+                            defaultMonth={form.watch('dateOfBirth')}
+                            selected={form.watch('dateOfBirth')}
+                            onSelect={(value) => {
+                              form.setValue('dateOfBirth', value);
+                            }}
                             numberOfMonths={1}
+                            disabled={[{ after: new Date() }]}
+                            hideNavigation={false}
                           />
                         </PopoverContent>
                       </Popover>

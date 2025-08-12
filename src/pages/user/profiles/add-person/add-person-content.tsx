@@ -15,7 +15,7 @@ export function AddPersonContent() {
 
   const handleOpenChange = () => {
     setOpen(false);
-    navigate(-1);
+    navigate('/user/profiles');
   };
 
   return (

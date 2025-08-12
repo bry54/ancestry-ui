@@ -14,6 +14,8 @@ function Calendar({
 }: React.ComponentProps<typeof DayPicker>) {
   return (
     <DayPicker
+      //captionLayout="dropdown"
+      navLayout="after"
       showOutsideDays={showOutsideDays}
       className={cn('p-3', className)}
       classNames={{
