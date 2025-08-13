@@ -98,7 +98,7 @@ import {
   WishlistPage,
 } from '@/pages/store-client';
 import { ChangeLogsPage, HelpSupportPage } from '@/pages/system';
-import { AccountHomePage, ProfilesListPage, AddPersonPage } from '@/pages/user';
+import { AccountHomePage, ProfilesListPage, AddPersonPage, MyConnectionsPage } from '@/pages/user';
 import { UserManagementPage, AuditLogPage } from '@/pages/admin';
 import { Navigate, Route, Routes } from 'react-router';
 
@@ -117,7 +117,7 @@ export function AppRoutingSetup() {
           <Route path="/user/profiles" element={<ProfilesListPage />} />
           <Route path="/user/profiles/add" element={<AddPersonPage />} />
           <Route path="/user/account" element={<AccountHomePage />} />
-          <Route path="/user/connections" element={<>Connections Page</>} />
+          <Route path="/user/connections" element={<MyConnectionsPage />} />
           <Route path="/network/tree-explorer" element={<TreeExplorerPage />} />
           <Route
             path="/network/relations-graph"
