@@ -98,12 +98,9 @@ import {
   WishlistPage,
 } from '@/pages/store-client';
 import { ChangeLogsPage, HelpSupportPage } from '@/pages/system';
-import { AccountHomePage } from '@/pages/user/account';
-import { AddPersonPage } from '@/pages/user/profiles/add-person';
-import { ProfilesListPage } from '@/pages/user/profiles/profiles-list';
-import { UserManagementPage } from '@/pages/admin';
+import { AccountHomePage, ProfilesListPage, AddPersonPage } from '@/pages/user';
+import { UserManagementPage, AuditLogPage } from '@/pages/admin';
 import { Navigate, Route, Routes } from 'react-router';
-import { AuditLogsPage } from '@/pages/admin/audit-logs/audit-logs-page.tsx';
 
 export function AppRoutingSetup() {
   return (
@@ -140,7 +137,7 @@ export function AppRoutingSetup() {
             path="/admin/government-approvals"
             element={<>Government Approvals Page</>}
           />
-          <Route path="/admin/audit-logs" element={<AuditLogsPage />} />
+          <Route path="/admin/audit-logs" element={<AuditLogPage />} />
           <Route path="/system/change-logs" element={<ChangeLogsPage />} />
           <Route path="/system/help" element={<HelpSupportPage />} />
 
