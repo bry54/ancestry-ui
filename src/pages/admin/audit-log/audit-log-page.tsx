@@ -18,29 +18,19 @@ export function AuditLogPage() {
   return (
     <Fragment>
       <PageNavbar />
-      {settings?.layout === 'demo1' && (
-        <Container>
-          <Toolbar>
-            <ToolbarHeading>
-              <ToolbarPageTitle />
-              <div className="flex flex-wrap items-center gap-2 font-medium">
-                <span className="text-sm text-secondary-foreground">
-                  Authorized Devices for Report Access
-                </span>
-                <span className="size-0.75 bg-mono/50 rounded-full"></span>
-                <Button mode="link" underlined="dashed" asChild>
-                  <Link to="#">Unlink All Devices</Link>
-                </Button>
-              </div>
-            </ToolbarHeading>
-            <ToolbarActions>
-              <Button variant="outline">
-                <Link to="#">Security Overview</Link>
-              </Button>
-            </ToolbarActions>
-          </Toolbar>
-        </Container>
-      )}
+      <Container>
+        <Toolbar>
+          <ToolbarHeading>
+            <ToolbarPageTitle />
+          </ToolbarHeading>
+          <ToolbarActions>
+            <Button variant="outline">
+              <Link to="#">Security Overview</Link>
+            </Button>
+          </ToolbarActions>
+        </Toolbar>
+      </Container>
+
       <Container>
         <AuditLogContent />
       </Container>
