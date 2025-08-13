@@ -30,7 +30,7 @@ export function ProfilesListContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const [limit] = useState(8);
+  const [limit] = useState(12);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export function ProfilesListContent() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-7.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-5 lg:gap-7.5">
         {items.map((item, index) => {
           return renderItem(item, index);
         })}
