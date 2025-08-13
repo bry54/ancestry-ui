@@ -5,8 +5,8 @@ export function Help2() {
   return (
     <div className="grid lg:grid-cols-2 gap-5 lg:gap-7.5">
       <Engage
-        title="Questions ?"
-        description="Visit our Help Center for detailed assistance on billing, payments, and subscriptions."
+        title="Need help with your research?"
+        description="Visit our Help Center for detailed assistance on building your family tree, understanding DNA results, and more."
         image={
           <>
             <img
