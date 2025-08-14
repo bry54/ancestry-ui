@@ -39,22 +39,21 @@ const EntryCallout = ({ className }: IEntryCalloutProps) => {
               ]}
             />
             <h2 className="text-xl font-semibold text-mono">
-              Connect Today & Join <br />
-              the{' '}
+              Invite your family and relatives to join <br />
+              your{' '}
               <Button mode="link" asChild className="text-xl font-semibold">
-                <Link to="#">KeenThemes Network</Link>
+                <Link to="/network/tree-explorer">Family Network Tree</Link>
               </Button>
             </h2>
             <p className="text-sm font-normal text-secondary-foreground leading-5.5">
-              Enhance your projects with premium themes and <br />
-              templates. Join the KeenThemes community today <br />
-              for top-quality designs and resources.
+              Discover, preserve, and share your family's story. <br />
+              Build your family tree, connect with your roots and preserve your heritage.
             </p>
           </div>
         </CardContent>
-        <CardFooter className="justify-center">
+        <CardFooter className="justify-center gap-5">
           <Button mode="link" underlined="dashed" asChild>
-            <Link to="#">Get Started</Link>
+            <Link to="#">Copy invite link</Link>
           </Button>
         </CardFooter>
       </Card>

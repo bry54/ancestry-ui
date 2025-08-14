@@ -43,7 +43,7 @@ import {
   AuthAccountDeactivatedPage,
   AuthWelcomeMessagePage,
 } from '@/pages/auth';
-import { Demo1LightSidebarPage } from '@/pages/dashboard';
+import { DashboardPage } from '@/pages/dashboard';
 import { FamilySizePage } from '@/pages/family-network/family-size';
 import { NameDistributionPage } from '@/pages/family-network/name-distribution';
 import { RelationsGraphPage } from '@/pages/family-network/relations-graph';
@@ -83,7 +83,7 @@ import {
   ProjectColumn2Page,
   ProjectColumn3Page,
 } from '@/pages/public-profile';
-import { AllProductsPage, DashboardPage } from '@/pages/store-admin';
+import { AllProductsPage, DashboardPage as StoreAdminDashboard} from '@/pages/store-admin';
 import {
   MyOrdersPage,
   OrderPlacedPage,
@@ -113,7 +113,7 @@ export function AppRoutingSetup() {
             </LayoutProvider>
           }
         >
-          <Route path="/" element={<Demo1LightSidebarPage />} />
+          <Route path="/" element={<DashboardPage />} />
           <Route path="/user/profiles" element={<ProfilesListPage />} />
           <Route path="/user/profiles/add" element={<AddPersonPage />} />
           <Route path="/user/account" element={<AccountHomePage />} />
@@ -414,7 +414,7 @@ export function AppRoutingSetup() {
             path="/store-client/order-receipt"
             element={<OrderReceiptPage />}
           />
-          <Route path="/store-admin/dashboard" element={<DashboardPage />} />
+          <Route path="/store-admin/dashboard" element={<StoreAdminDashboard />} />
           <Route
             path="/store-admin/inventory/all-products"
             element={<AllProductsPage />}

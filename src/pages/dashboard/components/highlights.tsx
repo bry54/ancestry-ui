@@ -1,28 +1,19 @@
 import { DropdownMenu4 } from '@/partials/dropdown-menu/dropdown-menu-4';
+import { RemixiconComponentType } from '@remixicon/react';
 import {
-  RemixiconComponentType,
-  RiBankLine,
-  RiFacebookCircleLine,
-  RiGoogleLine,
-  RiInstagramLine,
-  RiStore2Line,
-} from '@remixicon/react';
-import {
-  ArrowDown,
-  ArrowUp,
+  CakeIcon,
   EllipsisVertical,
+  SignpostIcon,
+  TreesIcon,
   type LucideIcon,
 } from 'lucide-react';
-import { Badge, BadgeDot } from '@/components/ui/badge';
+import { BadgeDot } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface IHighlightsRow {
   icon: LucideIcon | RemixiconComponentType;
-  text: string;
-  total: number;
-  stats: number;
-  increase: boolean;
+  text: React.ReactNode;
 }
 type IHighlightsRows = Array<IHighlightsRow>;
 
@@ -39,40 +30,27 @@ interface IHighlightsProps {
 const Highlights = ({ limit }: IHighlightsProps) => {
   const rows: IHighlightsRows = [
     {
-      icon: RiStore2Line,
-      text: 'Online Store',
-      total: 172,
-      stats: 3.9,
-      increase: true,
+      icon: CakeIcon,
+      text: (
+        <span>
+          <b>[Birthday]</b> John Doe (Turns 12)'
+        </span>
+      ),
     },
     {
-      icon: RiFacebookCircleLine,
-      text: 'Facebook',
-      total: 85,
-      stats: 0.7,
-      increase: false,
+      icon: SignpostIcon,
+      text: (
+        <span>
+          <b>[Memorial]</b> Someone died 6 years ago
+        </span>
+      ),
     },
-    {
-      icon: RiInstagramLine,
-      text: 'Instagram',
-      total: 36,
-      stats: 8.2,
-      increase: true,
-    },
-    {
-      icon: RiGoogleLine,
-      text: 'Google',
-      total: 26,
-      stats: 8.2,
-      increase: true,
-    },
-    { icon: RiBankLine, text: 'Retail', total: 7, stats: 0.7, increase: false },
   ];
 
   const items: IHighlightsItems = [
-    { badgeColor: 'bg-green-500', label: 'Metronic' },
-    { badgeColor: 'bg-destructive', label: 'Bundle' },
-    { badgeColor: 'bg-violet-500', label: 'MetronicNest' },
+    { badgeColor: 'bg-green-500', label: 'Paternal' },
+    { badgeColor: 'bg-destructive', label: 'Maternal' },
+    { badgeColor: 'bg-violet-500', label: 'others' },
   ];
 
   const renderRow = (row: IHighlightsRow, index: number) => {
@@ -84,17 +62,6 @@ const Highlights = ({ limit }: IHighlightsProps) => {
         <div className="flex items-center gap-1.5">
           <row.icon className="size-4.5 text-muted-foreground" />
           <span className="text-sm font-normal text-mono">{row.text}</span>
-        </div>
-        <div className="flex items-center text-sm font-medium text-foreground gap-6">
-          <span className="lg:text-right">${row.total}k</span>
-          <span className="flex items-center justify-end gap-1">
-            {row.increase ? (
-              <ArrowUp className="text-green-500 size-4" />
-            ) : (
-              <ArrowDown className="text-destructive size-4" />
-            )}
-            {row.stats}%
-          </span>
         </div>
       </div>
     );
@@ -112,27 +79,17 @@ const Highlights = ({ limit }: IHighlightsProps) => {
   };
 
   return (
-    <Card className="h-full">
+    <Card className="h-full scroll-auto">
       <CardHeader>
         <CardTitle>Highlights</CardTitle>
-        <DropdownMenu4
-          trigger={
-            <Button variant="ghost" mode="icon">
-              <EllipsisVertical />
-            </Button>
-          }
-        />
       </CardHeader>
       <CardContent className="flex flex-col gap-4 p-5 lg:p-7.5 lg:pt-4">
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-normal text-secondary-foreground">
-            All time sales
-          </span>
           <div className="flex items-center gap-2.5">
-            <span className="text-3xl font-semibold text-mono">$295.7k</span>
-            <Badge size="sm" variant="success" appearance="light">
-              +2.7%
-            </Badge>
+            <span className="text-3xl font-semibold text-mono">
+              Tree Composition
+            </span>
+            <TreesIcon color="red" />
           </div>
         </div>
         <div className="flex items-center gap-1 mb-1.5">
@@ -145,8 +102,8 @@ const Highlights = ({ limit }: IHighlightsProps) => {
             return renderItem(item, index);
           })}
         </div>
-        <div className="border-b border-input"></div>
-        <div className="grid gap-3">{rows.slice(0, limit).map(renderRow)}</div>
+        <div className="border-b border-input scroll-auto"></div>
+        <div className="grid gap-3">{rows.map(renderRow)}</div>
       </CardContent>
     </Card>
   );

@@ -57,7 +57,7 @@ export const ResponsiveVoronoiStippling: React.FC<ResponsiveVoronoiStipplingProp
       }
 
       // Generate initial random points based on density
-      let points = new Float64Array(n * 2);
+      const points = new Float64Array(n * 2);
       for (let i = 0; i < n; ++i) {
         while (true) {
           const x = Math.floor(Math.random() * width);
