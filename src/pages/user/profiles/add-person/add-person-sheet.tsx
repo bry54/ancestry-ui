@@ -3,24 +3,54 @@ import { API_URL } from '@/auth/adapters/jwt-auth-adapter.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { AlertCircle, CalendarDays, Check, CheckCheckIcon, LoaderCircleIcon } from 'lucide-react';
+import {
+  AlertCircle,
+  CalendarDays,
+  Check,
+  CheckCheckIcon,
+  LoaderCircleIcon,
+} from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Gender, LifeStatus } from '@/lib/enums';
+import { Any } from '@/lib/interfaces';
 import { cn } from '@/lib/utils.ts';
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert.tsx';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar.tsx';
 import { CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox.tsx';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input.tsx';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover.tsx';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select.tsx';
 import { Separator } from '@/components/ui/separator.tsx';
-import { Sheet, SheetBody, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-
+import {
+  Sheet,
+  SheetBody,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 
 interface AddPersonSheetProps {
   open: boolean;
@@ -122,7 +152,12 @@ export function AddPersonSheet({
           : { city: undefined, country: undefined },
       };
 
-      await axios.post(`${API_URL}/persons`, dto);
+      const response: Any = await axios.post(`${API_URL}/persons`, dto);
+      const p: Any = response.data;
+
+      await axios.post(`${API_URL}/managed-profile`, {
+        managedPersonId: p.id,
+      });
 
       setSuccessMessage('Person added successfully.');
       addPerson();

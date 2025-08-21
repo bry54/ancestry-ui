@@ -1,13 +1,17 @@
 import { Fragment, useEffect, useState } from 'react';
 import { API_URL } from '@/auth/adapters/jwt-auth-adapter';
+import { useAuth } from '@/auth/context/auth-context.ts';
 import { CardUserMini } from '@/partials/cards';
+import {
+  RiArrowLeftDoubleFill,
+  RiArrowRightDoubleFill,
+} from '@remixicon/react';
+import { Empty, Result, Spin } from 'antd';
 import axios from 'axios';
 import { ArrowRight, Search } from 'lucide-react';
+import { Any } from '@/lib/interfaces';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Empty, Result, Spin } from 'antd';
-import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from '@remixicon/react';
-import { useAuth } from '@/auth/context/auth-context.ts';
 
 export interface IAvatar {
   className: string;
@@ -33,17 +37,24 @@ export function ProfilesListContent() {
   const [page, setPage] = useState(1);
   const [limit] = useState(12);
   const [total, setTotal] = useState(0);
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchPersons = async () => {
       try {
-        const url = user?.isAdmin ? `${API_URL}/persons` : `${API_URL}/managed-profile`;
+        const url = user?.isAdmin
+          ? `${API_URL}/persons`
+          : `${API_URL}/managed-profile`;
         setLoading(true);
         const response = await axios.get(`${url}`, {
           params: { page, limit },
         });
-        const persons = response.data.data.map((person: any) => ({
+        let list = response.data.data;
+        if (!user?.isAdmin) {
+          list = list.map((item: Any) => item.managedPerson);
+        }
+
+        const persons = list.map((person: any) => ({
           avatar: {
             className: 'size-20 relative',
             image: person.avatar || '300-1.png',
@@ -86,7 +97,7 @@ export function ProfilesListContent() {
           disabled={page === 1}
           className="me-2"
         >
-          <RiArrowLeftDoubleFill/>
+          <RiArrowLeftDoubleFill />
         </Button>
         <span>
           Page {page} of {totalPages}
@@ -96,7 +107,7 @@ export function ProfilesListContent() {
           disabled={page === totalPages}
           className="ms-2"
         >
-          <RiArrowRightDoubleFill/>
+          <RiArrowRightDoubleFill />
         </Button>
       </div>
     );
@@ -115,11 +126,7 @@ export function ProfilesListContent() {
   if (error) {
     return (
       <div className="w-full h-120 md:h-136 bg-white rounded-lg shadow p-2">
-        <Result
-          status="error"
-          title="Request failed"
-          subTitle={error}
-        />
+        <Result status="error" title="Request failed" subTitle={error} />
       </div>
     );
   }
