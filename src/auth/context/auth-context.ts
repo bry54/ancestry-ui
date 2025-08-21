@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import {
   AuthModel,
   IChangePassword,
-  IResetPassword,
+  IResetPassword, ISelectRole,
   ISignIn,
   ISignUp,
   UserModel,
@@ -23,6 +23,7 @@ interface IContextType {
   getUser: () => Promise<UserModel | undefined>;
   logout: () => void;
   verify: () => Promise<void>;
+  selectRole: (dto: ISelectRole) => Promise<void>;
   isAdmin: boolean;
 }
 
@@ -40,6 +41,7 @@ export const AuthContext = createContext<IContextType>({
   getUser: async () => undefined,
   logout: () => {},
   verify: async () => {},
+  selectRole: async () => {},
   isAdmin: false,
 });
 

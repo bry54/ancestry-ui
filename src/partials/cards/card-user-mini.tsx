@@ -27,7 +27,7 @@ const CardUserMini = ({ avatar, verify, name, email }: IUserMiniProps) => {
       <div className="flex items-center justify-center gap-1.5 mb-2">
         <Link
           to="#"
-          className="hover:text-primary-active text-base leading-5 font-medium text-mono"
+          className="hover:text-primary-active text-base leading-5 font-medium text-mono "
         >
           {name}
         </Link>

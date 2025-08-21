@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Empty, Result, Spin } from 'antd';
 import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from '@remixicon/react';
+import { useAuth } from '@/auth/context/auth-context.ts';
 
 export interface IAvatar {
   className: string;
@@ -32,12 +33,14 @@ export function ProfilesListContent() {
   const [page, setPage] = useState(1);
   const [limit] = useState(12);
   const [total, setTotal] = useState(0);
+  const {user} = useAuth();
 
   useEffect(() => {
     const fetchPersons = async () => {
       try {
+        const url = user?.isAdmin ? `${API_URL}/persons` : `${API_URL}/managed-profile`;
         setLoading(true);
-        const response = await axios.get(`${API_URL}/persons`, {
+        const response = await axios.get(`${url}`, {
           params: { page, limit },
         });
         const persons = response.data.data.map((person: any) => ({
@@ -49,7 +52,7 @@ export function ProfilesListContent() {
               'flex size-2.5 bg-green-500 rounded-full absolute bottom-0.5 start-16 transform -translate-y-1/2',
           },
           name: `${person.firstName} ${person.lastName}`,
-          email: person.email || 'no-email@example.com',
+          email: person.email || '-',
           verify: true,
         }));
         setItems(persons);
@@ -63,7 +66,7 @@ export function ProfilesListContent() {
     };
 
     fetchPersons();
-  }, [page, limit]);
+  }, [page, limit, user]);
 
   const renderItem = (item: IMiniCardsContentItem, index: number) => (
     <CardUserMini

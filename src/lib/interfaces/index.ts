@@ -39,6 +39,10 @@ export interface IChangePassword {
   passwordConfirmation: string;
 }
 
+export interface ISelectRole {
+  role: Role;
+}
+
 export interface ISignUp {
   email: string;
   password: string;

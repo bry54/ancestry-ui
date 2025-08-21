@@ -5,7 +5,7 @@ import * as authHelper from '@/auth/lib/helpers';
 import {
   AuthModel,
   IChangePassword,
-  IResetPassword,
+  IResetPassword, ISelectRole,
   ISignIn,
   ISignUp,
   UserModel,
@@ -93,6 +93,18 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setCurrentUser(undefined);
   };
 
+  const selectRole = async (dto: ISelectRole) => {
+    try {
+      const auth = await JwtAuthAdapter.selectRole(dto);
+      saveAuth(auth);
+      const user = await getUser();
+      setCurrentUser(user || undefined);
+    } catch (error) {
+      saveAuth(undefined);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -110,6 +122,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         getUser,
         logout,
         verify,
+        selectRole,
         isAdmin,
       }}
     >

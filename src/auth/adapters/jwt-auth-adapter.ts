@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { OAuthProvider } from '@/lib/enums';
+import { OAuthProvider, Role } from '@/lib/enums';
 import {
   Any,
   AuthModel,
   IChangePassword,
   IOAuthOptions,
-  IResetPassword,
+  IResetPassword, ISelectRole,
   ISignIn,
   ISignUp,
   UserModel,
@@ -18,6 +18,7 @@ const RESET_PASSWORD_URL = `${API_URL}/auth/reset-password`;
 const CHANGE_PASSWORD_URL = `${API_URL}/auth/change-password`;
 const LOGOUT_URL = `${API_URL}/auth/logout`;
 const ME_URL = `${API_URL}/auth/me`;
+const SELECT_ROLE_URL = `${API_URL}/auth/select-role`;
 
 export const JwtAuthAdapter = {
   /**
@@ -101,6 +102,16 @@ export const JwtAuthAdapter = {
       return response.data;
     } catch (e) {
       console.error('[JWTAuthAdapter]: Unexpected error in getCurrentUser', e);
+      throw e;
+    }
+  },
+
+  async selectRole(dto: ISelectRole): Promise<AuthModel> {
+    try {
+      const response: Any = await axios.post(SELECT_ROLE_URL, dto);
+      return response.data;
+    } catch (e: Any) {
+      console.error('[JWTAuthAdapter]: Error in selectRole:', e);
       throw e;
     }
   },

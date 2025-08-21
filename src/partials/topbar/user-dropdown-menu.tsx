@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
-  const { logout, user } = useAuth();
+  const { logout, user, selectRole } = useAuth();
   const { currenLanguage, changeLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
 
@@ -41,8 +41,8 @@ export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
     changeLanguage(lang);
   };
 
-  const handleRoleChange = (role: Role) => {
-    console.log(role);
+  const handleRoleChange = async (role: Role) => {
+    await selectRole({ role });
   };
 
   const handleThemeToggle = (checked: boolean) => {
@@ -95,10 +95,7 @@ export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
 
         {/* Menu Items */}
         <DropdownMenuItem asChild>
-          <Link
-            to="/user/account"
-            className="flex items-center gap-2"
-          >
+          <Link to="/user/account" className="flex items-center gap-2">
             <IdCard />
             My Account
           </Link>
@@ -107,40 +104,43 @@ export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
         <DropdownMenuSeparator />
 
         {/* Role Selection Submenu with Radio Group */}
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="flex items-center gap-2 [&_[data-slot=dropdown-menu-sub-trigger-indicator]]:hidden hover:[&_[data-slot=badge]]:border-input data-[state=open]:[&_[data-slot=badge]]:border-input">
-            <RiSwitchLine />
-            <span className="flex items-center justify-between gap-2 grow relative">
-              Switch Role
-              <Badge variant="primary" appearance="light" size="sm">
-                {user?.role}
-              </Badge>
-            </span>
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent className="w-48">
-            <DropdownMenuRadioGroup
-              value={user?.role}
-              onValueChange={(value) => {
-                if (value != user?.role) handleRoleChange(value as Role);
-              }}
-            >
-              {user?.roles &&
-                user.roles.map((item) => (
-                  <DropdownMenuRadioItem
-                    key={item}
-                    value={item}
-                    className="flex items-center gap-2"
-                  >
-                    {getIcon(item as Role)}
-                    <span>{item}</span>
-                  </DropdownMenuRadioItem>
-                ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
+        {user?.roles?.length > 1 && (
+          <>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="flex items-center gap-2 [&_[data-slot=dropdown-menu-sub-trigger-indicator]]:hidden hover:[&_[data-slot=badge]]:border-input data-[state=open]:[&_[data-slot=badge]]:border-input">
+                <RiSwitchLine />
+                <span className="flex items-center justify-between gap-2 grow relative">
+                  Switch Role
+                  <Badge variant="primary" appearance="light" size="sm">
+                    {user?.role}
+                  </Badge>
+                </span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent className="w-48">
+                <DropdownMenuRadioGroup
+                  value={user?.role}
+                  onValueChange={(value) => {
+                    if (value != user?.role) handleRoleChange(value as Role);
+                  }}
+                >
+                  {user?.roles &&
+                    user.roles.map((item) => (
+                      <DropdownMenuRadioItem
+                        key={item}
+                        value={item}
+                        className="flex items-center gap-2"
+                      >
+                        {getIcon(item as Role)}
+                        <span>{item}</span>
+                      </DropdownMenuRadioItem>
+                    ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
 
-        <DropdownMenuSeparator />
-
+            <DropdownMenuSeparator />
+          </>
+        )}
         {/* Language Submenu with Radio Group */}
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="flex items-center gap-2 [&_[data-slot=dropdown-menu-sub-trigger-indicator]]:hidden hover:[&_[data-slot=badge]]:border-input data-[state=open]:[&_[data-slot=badge]]:border-input">
