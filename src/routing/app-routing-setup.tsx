@@ -39,6 +39,8 @@ import {
   AccountTeamsStarterPage,
   AccountUserProfilePage,
 } from '@/pages/account';
+import { AddUserPage, UserManagementPage } from '@/pages/admin';
+import { AuditLogPage } from '@/pages/admin/audit-log';
 import {
   AuthAccountDeactivatedPage,
   AuthWelcomeMessagePage,
@@ -83,7 +85,10 @@ import {
   ProjectColumn2Page,
   ProjectColumn3Page,
 } from '@/pages/public-profile';
-import { AllProductsPage, DashboardPage as StoreAdminDashboard} from '@/pages/store-admin';
+import {
+  AllProductsPage,
+  DashboardPage as StoreAdminDashboard,
+} from '@/pages/store-admin';
 import {
   MyOrdersPage,
   OrderPlacedPage,
@@ -98,8 +103,12 @@ import {
   WishlistPage,
 } from '@/pages/store-client';
 import { ChangeLogsPage, HelpSupportPage } from '@/pages/system';
-import { AccountHomePage, ProfilesListPage, AddPersonPage, MyConnectionsPage } from '@/pages/user';
-import { UserManagementPage, AuditLogPage } from '@/pages/admin';
+import {
+  AccountHomePage,
+  AddPersonPage,
+  MyConnectionsPage,
+  ProfilesListPage,
+} from '@/pages/user';
 import { Navigate, Route, Routes } from 'react-router';
 
 export function AppRoutingSetup() {
@@ -129,10 +138,8 @@ export function AppRoutingSetup() {
           />
           <Route path="/network/family-size" element={<FamilySizePage />} />
 
-          <Route
-            path="/admin/user-management"
-            element={<UserManagementPage />}
-          />
+          <Route path="/admin/users" element={<UserManagementPage />} />
+          <Route path="/admin/users/add" element={<AddUserPage />} />
           <Route
             path="/admin/government-approvals"
             element={<>Government Approvals Page</>}
@@ -414,7 +421,10 @@ export function AppRoutingSetup() {
             path="/store-client/order-receipt"
             element={<OrderReceiptPage />}
           />
-          <Route path="/store-admin/dashboard" element={<StoreAdminDashboard />} />
+          <Route
+            path="/store-admin/dashboard"
+            element={<StoreAdminDashboard />}
+          />
           <Route
             path="/store-admin/inventory/all-products"
             element={<AllProductsPage />}

@@ -82,7 +82,7 @@ This page handles the social and connection management aspects.
 
 ### **Admin Section**
 
-#### **User Management (`/admin/user-management`)**
+#### **User Management (`/admin/users`)**
 *   **Core Purpose:** Standard admin interface for managing all users in the system.
 *   **Key Components & Features:**
     *   A data table with all registered users.

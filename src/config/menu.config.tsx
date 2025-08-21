@@ -33,7 +33,7 @@ export const MENU_SIDEBAR: MenuConfig = [
   },
   { title: 'Family Size', icon: PieChart, path: '/network/family-size' },
   { heading: 'Admin' },
-  { title: 'User Management', icon: UserCog, path: '/admin/user-management' },
+  { title: 'User Management', icon: UserCog, path: '/admin/users' },
   {
     title: 'Government Approvals',
     icon: ShieldUser,

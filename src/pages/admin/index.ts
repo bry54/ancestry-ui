@@ -1,2 +1,1 @@
-export * from './user-management'
-export * from './audit-log'
+export * from './user-management';
