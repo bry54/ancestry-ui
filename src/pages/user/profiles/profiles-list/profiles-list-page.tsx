@@ -22,7 +22,8 @@ export function ProfilesListPage() {
           <ToolbarHeading>
             <ToolbarPageTitle />
             <ToolbarDescription>
-              Central Hub to manage profiles
+              Central Hub to manage people in your tree, add minors/deceased or
+              invite people from here.
             </ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
