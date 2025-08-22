@@ -8,7 +8,7 @@ import {
 } from '@remixicon/react';
 import { Empty, Result, Spin } from 'antd';
 import axios from 'axios';
-import { ArrowRight, Search } from 'lucide-react';
+import { ArrowRight, Eye, Search, Trash2, UserPlus } from 'lucide-react';
 import { Any } from '@/lib/interfaces';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,13 +29,31 @@ export interface IMiniCardsContentItem {
 }
 type IMiniCardsContentItems = Array<IMiniCardsContentItem>;
 
+const CardActions = () => {
+  return (
+    <div className="bg-neutral-50 dark:bg-neutral-800 flex justify-around items-center p-0">
+      <Button variant="ghost" size="icon">
+        <UserPlus className="h-4 w-4" />
+      </Button>
+      <span className="text-gray-300">|</span>
+      <Button variant="ghost" size="icon">
+        <Eye className="h-4 w-4" />
+      </Button>
+      <span className="text-gray-200">|</span>
+      <Button variant="ghost" size="icon">
+        <Trash2 className="h-4 w-4 text-red-500" />
+      </Button>
+    </div>
+  );
+};
+
 export function ProfilesListContent() {
   const [searchInput, setSearchInput] = useState('');
   const [items, setItems] = useState<IMiniCardsContentItems>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const [limit] = useState(12);
+  const [limit] = useState(15);
   const [total, setTotal] = useState(0);
   const { user } = useAuth();
 
@@ -86,6 +104,7 @@ export function ProfilesListContent() {
       email={item.email}
       verify={item.verify}
       key={index}
+      footer={<CardActions />}
     />
   );
 
@@ -157,7 +176,7 @@ export function ProfilesListContent() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-5 lg:gap-7.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 lg:gap-7.5">
         {items.map((item, index) => {
           return renderItem(item, index);
         })}
