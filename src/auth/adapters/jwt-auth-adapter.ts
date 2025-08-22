@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { OAuthProvider, Role } from '@/lib/enums';
+import { OAuthProvider } from '@/lib/enums';
 import {
   Any,
   AuthModel,
   IChangePassword,
   IOAuthOptions,
-  IResetPassword, ISelectRole,
+  IResetPassword,
+  ISelectRole,
   ISignIn,
   ISignUp,
   UserModel,
@@ -78,7 +79,10 @@ export const JwtAuthAdapter = {
       throw new Error('Passwords do not match');
     }
     try {
-      await axios.post(CHANGE_PASSWORD_URL, dto);
+      await axios.post(CHANGE_PASSWORD_URL, {
+        token: dto.token,
+        password: dto.password,
+      });
     } catch (e) {
       console.error(`[JWTAuthAdapter]: Enexpected error in changePassword`, e);
       throw e;

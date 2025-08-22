@@ -5,12 +5,10 @@ import { useNavigate } from 'react-router-dom';
 
 export function AddUserContent() {
   const [open, setOpen] = useState(true);
-  const [selectedProductId] = useState('123');
   const navigate = useNavigate();
 
   const handleAddUser = () => {
-    console.log('Added');
-    navigate(-1);
+    navigate('/admin/users');
   };
 
   const handleOpenChange = () => {
@@ -23,7 +21,6 @@ export function AddUserContent() {
       <UserManagementPage />
       <AddUserSheet
         open={open}
-        productId={selectedProductId}
         onOpenChange={handleOpenChange}
         addUser={handleAddUser}
       />

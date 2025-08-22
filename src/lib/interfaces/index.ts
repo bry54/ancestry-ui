@@ -35,6 +35,7 @@ export interface IResetPassword {
 }
 
 export interface IChangePassword {
+  token: string | null;
   password: string;
   passwordConfirmation: string;
 }

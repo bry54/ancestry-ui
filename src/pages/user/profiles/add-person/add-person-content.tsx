@@ -5,12 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 export function AddPersonContent() {
   const [open, setOpen] = useState(true);
-  const [selectedProductId] = useState('123');
   const navigate = useNavigate();
 
   const handleAddPerson = () => {
     console.log('Added');
-    navigate(-1);
+    navigate('/user/profiles');
   };
 
   const handleOpenChange = () => {
@@ -23,7 +22,6 @@ export function AddPersonContent() {
       <ProfilesListPage />
       <AddPersonSheet
         open={open}
-        productId={selectedProductId}
         onOpenChange={handleOpenChange}
         addPerson={handleAddPerson}
       />

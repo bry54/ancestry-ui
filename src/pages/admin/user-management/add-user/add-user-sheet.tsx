@@ -11,7 +11,6 @@ import {
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Role } from '@/lib/enums';
-import { Any } from '@/lib/interfaces';
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert.tsx';
 import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
@@ -26,6 +25,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input.tsx';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator.tsx';
 import {
   Sheet,
   SheetBody,
@@ -38,22 +38,24 @@ import {
 interface AddUSerSheetProps {
   open: boolean;
   onOpenChange: () => void;
-  productId: string | null;
   addUser: () => void;
 }
 
 interface IAddUSerDto {
   email: string;
   roles: string[];
+  person: {
+    firstName: string;
+    lastName: string;
+  };
 }
 
 const getAddUserSchema = () => {
   return z.object({
-    email: z.string().min(1, { message: 'First name is required.' }),
+    email: z.string().min(1, { message: 'Email is required.' }),
+    firstName: z.string().min(1, { message: 'First name is required.' }),
+    lastName: z.string().min(1, { message: 'Email is required.' }),
     roles: z.array(z.string()).optional(),
-    terms: z.boolean().refine((val) => val, {
-      message: 'You must agree to the terms and conditions.',
-    }),
   });
 };
 
@@ -72,8 +74,9 @@ export function AddUserSheet({
     resolver: zodResolver(getAddUserSchema()),
     defaultValues: {
       email: '',
-      roles: [''],
-      terms: false,
+      firstName: '',
+      lastName: '',
+      roles: [Role.VIEWER],
     },
   });
 
@@ -85,6 +88,10 @@ export function AddUserSheet({
       const dto: IAddUSerDto = {
         email: values.email,
         roles: values.roles ?? [Role.VIEWER],
+        person: {
+          firstName: values.firstName,
+          lastName: values.lastName,
+        },
       };
 
       await axios.post(`${API_URL}/user`, dto);
@@ -156,14 +163,77 @@ export function AddUserSheet({
                     )}
                   />
 
+                  <FormItem>
+                    <FormLabel>Select Roles</FormLabel>
+                    <div className="space-y-2">
+                      {Object.keys(Role).map((role) => (
+                        <FormField
+                          key={role}
+                          control={form.control}
+                          name="roles"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={role}
+                                className="flex flex-row items-start space-x-3 space-y-0"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    disabled={role == Role.VIEWER}
+                                    checked={
+                                      role == Role.VIEWER ||
+                                      field.value?.includes(role)
+                                    }
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([
+                                            ...(field.value ?? []),
+                                            role,
+                                          ])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value: string) => value !== role,
+                                            ),
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {role}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+
+                  <Separator />
+
                   <FormField
                     control={form.control}
-                    name="roles"
+                    name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Select Roles</FormLabel>
+                        <FormLabel>First Name</FormLabel>
                         <FormControl>
-                          <Checkbox defaultChecked={true} />
+                          <Input placeholder="Enter first name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Last Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter surname" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

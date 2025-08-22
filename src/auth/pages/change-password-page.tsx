@@ -56,12 +56,13 @@ export function ChangePasswordPage() {
       setError(null);
 
       await changePassword({
+        token,
         password: values.password,
         passwordConfirmation: values.confirmPassword,
       });
 
       // Set success message
-      setSuccessMessage('Password changed successfully!');
+      setSuccessMessage('Password set successfully!');
 
       // Reset form
       form.reset();

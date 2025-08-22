@@ -55,7 +55,6 @@ import {
 interface AddPersonSheetProps {
   open: boolean;
   onOpenChange: () => void;
-  productId: string | null;
   addPerson: () => void;
 }
 
