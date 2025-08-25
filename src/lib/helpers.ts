@@ -115,3 +115,7 @@ export function formatDateTime(input: Date | string | number): string {
     hour12: true,
   });
 }
+
+export function capitalizeFirstLetter(val: string) {
+  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}

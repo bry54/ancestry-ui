@@ -310,39 +310,45 @@ export function AddPersonSheet({
 
                   <Separator className="my-4" />
 
-                  <FormField
-                    control={form.control}
-                    name="firstName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>First Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your first name"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="flex gap-2">
+                    <div className="grow">
+                      <FormField
+                        control={form.control}
+                        name="firstName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter your first name"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                  <FormField
-                    control={form.control}
-                    name="lastName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Last Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your last name"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <div className="grow">
+                      <FormField
+                        control={form.control}
+                        name="lastName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Last Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter your last name"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
 
                   <div className="flex gap-2">
                     <div className="grow">
@@ -457,39 +463,45 @@ export function AddPersonSheet({
 
                   <Separator className="my-4" />
 
-                  <FormField
-                    control={form.control}
-                    name="fatherName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Father's Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your father's first name"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="flex gap-2">
+                    <div className="grow">
+                      <FormField
+                        control={form.control}
+                        name="fatherName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Father's Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter your father's first name"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                  <FormField
-                    control={form.control}
-                    name="motherName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Mother's Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your mother's first name"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <div className="grow">
+                      <FormField
+                        control={form.control}
+                        name="motherName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Mother's Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter your mother's first name"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
 
                   <Separator className="my-4" />
 

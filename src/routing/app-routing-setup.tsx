@@ -106,6 +106,7 @@ import { ChangeLogsPage, HelpSupportPage } from '@/pages/system';
 import {
   AccountHomePage,
   AddPersonPage,
+  InvitePersonPage,
   MyConnectionsPage,
   ProfilesListPage,
 } from '@/pages/user';
@@ -125,6 +126,7 @@ export function AppRoutingSetup() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/user/profiles" element={<ProfilesListPage />} />
           <Route path="/user/profiles/add" element={<AddPersonPage />} />
+          <Route path="/user/profiles/invite" element={<InvitePersonPage />} />
           <Route path="/user/account" element={<AccountHomePage />} />
           <Route path="/user/connections" element={<MyConnectionsPage />} />
           <Route path="/network/tree-explorer" element={<TreeExplorerPage />} />

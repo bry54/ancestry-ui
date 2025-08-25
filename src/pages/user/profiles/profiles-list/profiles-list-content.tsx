@@ -8,7 +8,8 @@ import {
 } from '@remixicon/react';
 import { Empty, Result, Spin } from 'antd';
 import axios from 'axios';
-import { ArrowRight, Eye, Search, Trash2, UserPlus } from 'lucide-react';
+import { Eye, Search, Trash2, UserPlus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Any } from '@/lib/interfaces';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,7 +22,12 @@ export interface IAvatar {
   badgeClass: string;
 }
 
+export interface ICardActions {
+  onInviteAction: () => void;
+}
+
 export interface IMiniCardsContentItem {
+  data: any;
   avatar: IAvatar;
   name: string;
   email: string;
@@ -29,15 +35,16 @@ export interface IMiniCardsContentItem {
 }
 type IMiniCardsContentItems = Array<IMiniCardsContentItem>;
 
-const CardActions = () => {
+const CardActions = (props: ICardActions) => {
+  const { onInviteAction } = props;
   return (
     <div className="bg-neutral-50 dark:bg-neutral-800 flex justify-around items-center p-0">
-      <Button variant="ghost" size="icon">
-        <UserPlus className="h-4 w-4" />
+      <Button variant="ghost" size="icon" onClick={onInviteAction}>
+        <UserPlus className="h-4 w-4 text-blue-500" />
       </Button>
       <span className="text-gray-300">|</span>
       <Button variant="ghost" size="icon">
-        <Eye className="h-4 w-4" />
+        <Eye className="h-4 w-4 text-yellow-500" />
       </Button>
       <span className="text-gray-200">|</span>
       <Button variant="ghost" size="icon">
@@ -56,6 +63,7 @@ export function ProfilesListContent() {
   const [limit] = useState(15);
   const [total, setTotal] = useState(0);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPersons = async () => {
@@ -97,16 +105,24 @@ export function ProfilesListContent() {
     fetchPersons();
   }, [page, limit, user]);
 
-  const renderItem = (item: IMiniCardsContentItem, index: number) => (
-    <CardUserMini
-      avatar={item.avatar}
-      name={item.name}
-      email={item.email}
-      verify={item.verify}
-      key={index}
-      footer={<CardActions />}
-    />
-  );
+  const renderItem = (item: IMiniCardsContentItem, index: number) => {
+    const inviteBtnAction = () => {
+      navigate('/user/profiles/invite', {
+        state: { person: item.data },
+      });
+    };
+
+    return (
+      <CardUserMini
+        avatar={item.avatar}
+        name={item.name}
+        email={item.email}
+        verify={item.verify}
+        key={index}
+        footer={<CardActions onInviteAction={inviteBtnAction} />}
+      />
+    );
+  };
 
   const Pagination = () => {
     return (

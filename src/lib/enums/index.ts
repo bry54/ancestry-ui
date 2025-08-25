@@ -29,11 +29,45 @@ export enum OAuthProvider {
 export enum LifeStatus {
   ALIVE = 'ALIVE',
   DECEASED = 'DECEASED',
-  UNKNOWN = 'UNKNOWN'
+  UNKNOWN = 'UNKNOWN',
 }
 
 export enum Gender {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
   OTHER = 'OTHER',
+}
+
+export enum LineageSide {
+  Maternal = 'MATERNAL',
+  Paternal = 'PATERNAL',
+}
+
+export enum RelationshipType {
+  Parent = 'PARENT',
+  Child = 'CHILD',
+  Sibling = 'SIBLING',
+  HalfSibling = 'HALF_SIBLING',
+  Spouse = 'SPOUSE',
+  GrandParent = 'GRANDPARENT',
+  GrandChild = 'GRANDCHILD',
+  UncleOrAunt = 'UNCLE_OR_AUNT', // Sibling of parent
+  NieceOrNephew = 'NIECE_OR_NEPHEW', // Child of sibling
+  Cousin = 'COUSIN',
+  ParentInLaw = 'PARENT_IN_LAW',
+  SiblingInLaw = 'SIBLING_IN_LAW',
+  ChildInLaw = 'CHILD_IN_LAW',
+  StepParent = 'STEPPARENT',
+  StepChild = 'STEPCHILD',
+  StepSibling = 'STEPSIBLING',
+  Guardian = 'GUARDIAN',
+  Ward = 'WARD',
+  AdoptiveParent = 'ADOPTIVE_PARENT',
+  AdoptedChild = 'ADOPTED_CHILD',
+  GodParent = 'GODPARENT',
+  GodChild = 'GODCHILD',
+  Fiance = 'FIANCE',
+  ExSpouse = 'EX_SPOUSE',
+  Friend = 'FRIEND',
+  Other = 'OTHER',
 }
