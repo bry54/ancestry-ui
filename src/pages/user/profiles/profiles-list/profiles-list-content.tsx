@@ -136,8 +136,10 @@ export function ProfilesListContent() {
 
   if (loading) {
     return (
-      <div className="w-full h-120 md:h-136 bg-white rounded-lg shadow p-2">
-        <Spin size="large" />
+      <div className="w-full flex grow justify-center h-120 md:h-136 bg-white rounded-lg shadow p-2">
+        <div className="flex items-center justify-center">
+          <Spin size="large" />
+        </div>
       </div>
     );
   }
@@ -145,7 +147,9 @@ export function ProfilesListContent() {
   if (error) {
     return (
       <div className="w-full h-120 md:h-136 bg-white rounded-lg shadow p-2">
-        <Result status="error" title="Request failed" subTitle={error} />
+        <div className="flex items-center justify-center">
+          <Result status="error" title="Request failed" subTitle={error} />
+        </div>
       </div>
     );
   }
@@ -168,7 +172,7 @@ export function ProfilesListContent() {
           <div className="flex relative">
             <Search className="size-4 text-muted-foreground absolute start-3 top-1/2 -translate-y-1/2" />
             <Input
-              placeholder="Type name, team"
+              placeholder="Type name"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               className="ps-9 w-40"
