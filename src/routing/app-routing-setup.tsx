@@ -107,6 +107,7 @@ import {
   AccountHomePage,
   AddPersonPage,
   InvitePersonPage,
+  InviteRespondPage,
   MyConnectionsPage,
   ProfilesListPage,
 } from '@/pages/user';
@@ -129,6 +130,10 @@ export function AppRoutingSetup() {
           <Route path="/user/profiles/invite" element={<InvitePersonPage />} />
           <Route path="/user/account" element={<AccountHomePage />} />
           <Route path="/user/connections" element={<MyConnectionsPage />} />
+          <Route
+            path="/user/connections/respond"
+            element={<InviteRespondPage />}
+          />
           <Route path="/network/tree-explorer" element={<TreeExplorerPage />} />
           <Route
             path="/network/relations-graph"
