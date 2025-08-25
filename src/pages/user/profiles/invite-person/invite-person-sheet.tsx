@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { LineageSide, RelationshipType } from '@/lib/enums';
 import { capitalizeFirstLetter } from '@/lib/helpers.ts';
+import { Any } from '@/lib/interfaces';
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert.tsx';
 import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
@@ -92,26 +93,20 @@ export function InvitePersonSheet({
       const dto: IInvitePersonDto = {
         email: values.email,
         phone: values.phone,
-        relationshipMeta: {
-          targetPersonId: person.id,
-          type: values.type as RelationshipType,
-          lineageSide: values.lineageSide as LineageSide,
-        },
+        targetPersonId: person.id,
+        type: values.type as RelationshipType,
+        lineageSide: values.lineageSide as LineageSide,
       };
 
-      console.log(person, dto);
-      return;
-
-      await axios.post(`${API_URL}/invitations`, dto);
+      await axios.post(`${API_URL}/invitations/create`, dto);
 
       setSuccessMessage('Invitation sent successfully.');
       onInvitePerson();
-    } catch (err) {
+    } catch (err: Any) {
       console.error('[INVITE_PERSON_SHEET] Error sending invitation:', err);
       setError(
-        err instanceof Error
-          ? err.message
-          : 'An unexpected error occurred. Please try again.',
+        err?.response?.data?.message ??
+          'An unexpected error occurred. Please try again.',
       );
     } finally {
       setIsProcessing(false);
@@ -226,15 +221,18 @@ export function InvitePersonSheet({
                                 </SelectTrigger>
                                 <SelectContent>
                                   {Object.entries(RelationshipType).map(
-                                    ([key, value]) => (
-                                      <SelectItem key={key} value={key}>
-                                        {capitalizeFirstLetter(
-                                          value
-                                            .toLowerCase()
-                                            .replace(/_/g, ' '),
-                                        )}
-                                      </SelectItem>
-                                    ),
+                                    ([key, value]) => {
+                                      console.log(key, value);
+                                      return (
+                                        <SelectItem key={value} value={value}>
+                                          {capitalizeFirstLetter(
+                                            value
+                                              .toLowerCase()
+                                              .replace(/_/g, ' '),
+                                          )}
+                                        </SelectItem>
+                                      );
+                                    },
                                   )}
                                 </SelectContent>
                               </Select>
@@ -265,7 +263,7 @@ export function InvitePersonSheet({
                                 <SelectContent>
                                   {Object.entries(LineageSide).map(
                                     ([key, value]) => (
-                                      <SelectItem key={key} value={key}>
+                                      <SelectItem key={value} value={value}>
                                         {capitalizeFirstLetter(
                                           value
                                             .toLowerCase()

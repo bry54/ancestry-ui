@@ -33,6 +33,7 @@ export interface IMiniCardsContentItem {
   email: string;
   verify: boolean;
 }
+
 type IMiniCardsContentItems = Array<IMiniCardsContentItem>;
 
 const CardActions = (props: ICardActions) => {
@@ -80,7 +81,7 @@ export function ProfilesListContent() {
           list = list.map((item: Any) => item.managedPerson);
         }
 
-        const persons = list.map((person: any) => ({
+        const persons: IMiniCardsContentItem[] = list.map((person: any) => ({
           avatar: {
             className: 'size-20 relative',
             image: person.avatar || '300-1.png',
@@ -91,6 +92,7 @@ export function ProfilesListContent() {
           name: `${person.firstName} ${person.lastName}`,
           email: person.email || '-',
           verify: true,
+          data: person,
         }));
         setItems(persons);
         setTotal(response.data.total);

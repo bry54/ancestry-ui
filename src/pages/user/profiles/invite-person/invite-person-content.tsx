@@ -12,11 +12,9 @@ interface IInvitePerson {
 export interface IInvitePersonDto {
   email: string;
   phone?: string;
-  relationshipMeta: {
-    type: RelationshipType;
-    targetPersonId: string;
-    lineageSide?: LineageSide;
-  };
+  type?: RelationshipType;
+  targetPersonId: string;
+  lineageSide?: LineageSide;
 }
 
 export function InvitePersonContent({ person }: IInvitePerson) {
