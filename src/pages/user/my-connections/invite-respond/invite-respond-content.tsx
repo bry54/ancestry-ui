@@ -13,17 +13,17 @@ export function InviteRespondContent({ token }: InviteRespondPageProps) {
 
   const handleAccept = () => {
     console.log('Accepted');
-    navigate('/user/my-connections');
+    navigate('/user/connections');
   };
 
   const handleReject = () => {
     console.log('Rejected');
-    navigate('/user/my-connections');
+    navigate('/user/connections');
   };
 
   const handleOpenChange = () => {
     setOpen(false);
-    navigate('/user/my-connections');
+    navigate('/user/connections');
   };
 
   return (
