@@ -26,7 +26,7 @@ export function MyConnectionsPage() {
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <Button variant="primary">Add Member</Button>
+              <Button variant="primary">Export</Button>
             </ToolbarActions>
           </Toolbar>
         </Container>
