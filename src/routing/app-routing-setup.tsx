@@ -130,10 +130,6 @@ export function AppRoutingSetup() {
           <Route path="/user/profiles/invite" element={<InvitePersonPage />} />
           <Route path="/user/account" element={<AccountHomePage />} />
           <Route path="/user/connections" element={<MyConnectionsPage />} />
-          <Route
-            path="/user/connections/respond"
-            element={<InviteRespondPage />}
-          />
           <Route path="/network/tree-explorer" element={<TreeExplorerPage />} />
           <Route
             path="/network/relations-graph"
@@ -442,6 +438,7 @@ export function AppRoutingSetup() {
       <Route path="error/*" element={<ErrorRouting />} />
       <Route path="auth/*" element={<AuthRouting />} />
       <Route path="*" element={<Navigate to="/error/404" />} />
+      <Route path="/user/connections/respond" element={<InviteRespondPage />} />
     </Routes>
   );
 }

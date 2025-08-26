@@ -6,7 +6,6 @@ import axios from 'axios';
 import { UserCheck, UserX } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { LifeStatus } from '@/lib/enums';
 import { toAbsoluteUrl } from '@/lib/helpers.ts';
 import { Any } from '@/lib/interfaces';
 import { Button } from '@/components/ui/button';
@@ -50,8 +49,8 @@ const mappedData: Any = {
 const getInviteResponseSchema = () => {
   return z
     .object({
-      password: z.string().min(1, { message: 'Password is required.' }),
-      passwordConfirm: z.string().min(1, { message: 'Confirm Password' }),
+      password: z.string().optional(),
+      passwordConfirm: z.string().optional(),
     })
     .refine((data) => data.password === data.passwordConfirm, {
       message: 'Passwords are not matching',
@@ -136,17 +135,42 @@ export function InviteRespondSheet({
 
       const dto: Any = {
         token: token,
-        password: values.password as LifeStatus,
+        password: values.password,
       };
 
       await axios.post(`${API_URL}/invitations/accept`, dto);
       onAccept();
-    } catch (err) {
-      console.error('[ADD_PERSON_SHEET] Error adding person:', err);
+    } catch (err: Any) {
+      console.error(
+        '[INVITATION_RESPONSE_SHEET] Error accepting invitation:',
+        err,
+      );
       setError(
-        err instanceof Error
-          ? err.message
-          : 'An unexpected error occurred. Please try again.',
+        err.response?.data?.message ||
+          'An unexpected error occurred. Please try again.',
+      );
+    } finally {
+      setIsProcessing(false);
+    }
+  }
+
+  async function rejectInvitation() {
+    try {
+      setIsProcessing(true);
+      setError(null);
+      const dto: Any = {
+        token: token,
+      };
+      await axios.post(`${API_URL}/invitations/reject`, dto);
+      onReject();
+    } catch (err: Any) {
+      console.error(
+        '[INVITATION_RESPONSE_SHEET] Error rejecting invitation:',
+        err,
+      );
+      setError(
+        err.response?.data?.message ||
+          'An unexpected error occurred. Please try again.',
       );
     } finally {
       setIsProcessing(false);
@@ -294,7 +318,7 @@ export function InviteRespondSheet({
               <Button
                 className="grow bg-red-500 hover:bg-red-600 text-white"
                 disabled={isProcessing}
-                onClick={onReject}
+                onClick={rejectInvitation}
               >
                 <span className="flex items-center gap-2">
                   <UserX className="h-4 w-4" /> Reject Invite
