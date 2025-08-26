@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { API_URL } from '@/auth/adapters/jwt-auth-adapter.ts';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { RiCheckboxCircleFill } from '@remixicon/react';
 import {
@@ -15,7 +16,15 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { EllipsisVertical, Filter, Search, Settings2, X } from 'lucide-react';
+import axios from 'axios';
+import {
+  EllipsisVertical,
+  Filter,
+  Loader2,
+  Search,
+  Settings2,
+  X,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -55,389 +64,36 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Switch } from '@/components/ui/switch';
 
-interface IData {
-  id: string;
-  user: {
-    avatar: string;
-    userName: string;
+interface IConnection {
+  person: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    fatherName: string;
+    motherName: string;
+    otherGivenNames: string[];
+    nickNames: string[];
+    gender: 'MALE' | 'FEMALE';
+    dateOfBirth: string;
+    dateOfDeath: string | null;
+    placeOfBirth: {
+      city: string;
+      country: string;
+    };
+    placeOfDeath: {
+      city: string;
+      country: string;
+    } | null;
   };
-  phone: string;
-  branch: string;
-  logos: string[];
-  labels: string[];
-  switch: boolean;
+  relationshipPath: string;
 }
 
-const data: IData[] = [
-  {
-    id: '1',
-    user: {
-      avatar: '300-3.png',
-      userName: 'Tyler Hero',
-    },
-    phone: '(212) 867-5309',
-    branch: 'Miami, FL',
-    logos: ['slack.svg', 'twitch-purple.svg', 'invision.svg'],
-    labels: ['NFT', 'Design'],
-    switch: true,
-  },
-  {
-    id: '2',
-    user: {
-      avatar: '300-23.png',
-      userName: 'Jane Smith',
-    },
-    phone: '(305) 421-7890',
-    branch: 'Dallas, TX',
-    logos: ['google-analytics.svg', 'google-calendar.svg'],
-    labels: ['Lead', 'Investor'],
-    switch: false,
-  },
-  {
-    id: '3',
-    user: {
-      avatar: '300-1.png',
-      userName: 'Emma Johnson',
-    },
-    phone: '(702) 314-1592',
-    branch: 'Atlanta, GA',
-    logos: ['tiktok-2.svg', 'monetha.svg', 'twitch-purple.svg'],
-    labels: ['Support', 'Consultant'],
-    switch: true,
-  },
-  {
-    id: '4',
-    user: {
-      avatar: '300-14.png',
-      userName: 'Michael Brown',
-    },
-    phone: '(415) 926-6487',
-    branch: 'Denver, CO',
-    logos: ['x.svg', 'instagram-2.svg'],
-    labels: ['Developer', 'Advisor'],
-    switch: true,
-  },
-  {
-    id: '5',
-    user: {
-      avatar: '300-19.png',
-      userName: 'Chloe Davis',
-    },
-    phone: '(512) 582-4316',
-    branch: 'Seattle, WA',
-    logos: ['twitch-purple.svg', 'invision.svg', 'slack.svg', 'tiktok-2.svg'],
-    labels: ['Strategist', 'Partner'],
-    switch: false,
-  },
-  {
-    id: '6',
-    user: {
-      avatar: '300-6.png',
-      userName: 'William Wilson',
-    },
-    phone: '(312) 753-9801',
-    branch: 'Boston, MA',
-    logos: ['jira.svg', 'slack.svg', 'google-webdev.svg'],
-    labels: ['Manager', 'Educator'],
-    switch: false,
-  },
-  {
-    id: '7',
-    user: {
-      avatar: '300-34.png',
-      userName: 'Olivia Martin',
-    },
-    phone: '(213) 674-2983',
-    branch: 'Phoenix, AZ',
-    logos: ['azure.svg'],
-    labels: ['Creator', 'Analyst'],
-    switch: false,
-  },
-  {
-    id: '8',
-    user: {
-      avatar: '300-4.png',
-      userName: 'Ethan Garcia',
-    },
-    phone: '(617) 935-2641',
-    branch: 'Detroit, MI',
-    logos: ['facebook.svg', 'weave.svg', 'plastic-scm.svg'],
-    labels: ['Vendor', 'Support'],
-    switch: true,
-  },
-  {
-    id: '9',
-    user: {
-      avatar: '300-13.png',
-      userName: 'Ava Rodriguez',
-    },
-    phone: '(404) 762-1453',
-    branch: 'Nashville, TN',
-    logos: ['sololearn.svg', 'twitch-purple.svg', 'linkedin.svg', 'office.svg'],
-    labels: ['Coordinator', 'Marketer'],
-    switch: true,
-  },
-  {
-    id: '10',
-    user: {
-      avatar: '300-31.png',
-      userName: 'Matthew Martinez',
-    },
-    phone: '(503) 894-3752',
-    branch: 'Portland, OR',
-    logos: ['slack.svg'],
-    labels: ['Engineer', 'Executive'],
-    switch: true,
-  },
-  {
-    id: '11',
-    user: {
-      avatar: '300-7.png',
-      userName: 'Sophia Anderson',
-    },
-    phone: '(213) 555-3987',
-    branch: 'Los Angeles, CA',
-    logos: ['slack.svg', 'twitch-purple.svg'],
-    labels: ['Project Manager', 'Organizer'],
-    switch: true,
-  },
-  {
-    id: '12',
-    user: {
-      avatar: '300-8.png',
-      userName: 'Mason Taylor',
-    },
-    phone: '(702) 555-1632',
-    branch: 'Las Vegas, NV',
-    logos: ['jira.svg', 'google-analytics.svg'],
-    labels: ['Scrum Master', 'Agile Coach'],
-    switch: false,
-  },
-  {
-    id: '13',
-    user: {
-      avatar: '300-9.png',
-      userName: 'Isabella Lee',
-    },
-    phone: '(512) 555-8921',
-    branch: 'Austin, TX',
-    logos: ['twitch-purple.svg', 'invision.svg'],
-    labels: ['Sales', 'Customer Success'],
-    switch: true,
-  },
-  {
-    id: '14',
-    user: {
-      avatar: '300-10.png',
-      userName: 'James Martinez',
-    },
-    phone: '(503) 555-7389',
-    branch: 'Portland, OR',
-    logos: ['slack.svg', 'jira.svg'],
-    labels: ['E-commerce', 'Payments'],
-    switch: false,
-  },
-  {
-    id: '15',
-    user: {
-      avatar: '300-11.png',
-      userName: 'Emily Thomas',
-    },
-    phone: '(312) 555-2013',
-    branch: 'Chicago, IL',
-    logos: ['google-calendar.svg', 'google-analytics.svg'],
-    labels: ['Meetings', 'Webinars'],
-    switch: true,
-  },
-  {
-    id: '16',
-    user: {
-      avatar: '300-12.png',
-      userName: 'Benjamin Harris',
-    },
-    phone: '(213) 555-1678',
-    branch: 'Los Angeles, CA',
-    logos: ['jira.svg', 'twitch-purple.svg'],
-    labels: ['Support', 'Customer Service'],
-    switch: false,
-  },
-  {
-    id: '17',
-    user: {
-      avatar: '300-15.png',
-      userName: 'Charlotte Young',
-    },
-    phone: '(702) 555-9073',
-    branch: 'Las Vegas, NV',
-    logos: ['monetha.svg', 'sololearn.svg'],
-    labels: ['Creative', 'Graphics'],
-    switch: true,
-  },
-  {
-    id: '18',
-    user: {
-      avatar: '300-16.png',
-      userName: 'Henry Clark',
-    },
-    phone: '(512) 555-6712',
-    branch: 'Austin, TX',
-    logos: ['google-webdev.svg', 'google-analytics.svg'],
-    labels: ['Backend', 'Database'],
-    switch: false,
-  },
-  {
-    id: '19',
-    user: {
-      avatar: '300-17.png',
-      userName: 'Amelia Lewis',
-    },
-    phone: '(415) 555-0193',
-    branch: 'San Francisco, CA',
-    logos: ['jira.svg', 'twitch-purple.svg'],
-    labels: ['Product Manager', 'Coordinator'],
-    switch: true,
-  },
-  {
-    id: '20',
-    user: {
-      avatar: '300-18.png',
-      userName: 'Lucas Walker',
-    },
-    phone: '(312) 555-3402',
-    branch: 'Chicago, IL',
-    logos: ['slack.svg', 'google-analytics.svg'],
-    labels: ['Content Creator', 'Blogger'],
-    switch: false,
-  },
-  {
-    id: '21',
-    user: {
-      avatar: '300-20.png',
-      userName: 'Harper White',
-    },
-    phone: '(213) 555-7819',
-    branch: 'Los Angeles, CA',
-    logos: ['jira.svg', 'twitch-purple.svg'],
-    labels: ['Video', 'Content'],
-    switch: true,
-  },
-  {
-    id: '22',
-    user: {
-      avatar: '300-21.png',
-      userName: 'Jack Harris',
-    },
-    phone: '(702) 555-4890',
-    branch: 'Las Vegas, NV',
-    logos: ['slack.svg', 'google-calendar.svg'],
-    labels: ['UX/UI Designer', 'Prototype'],
-    switch: false,
-  },
-  {
-    id: '23',
-    user: {
-      avatar: '300-22.png',
-      userName: 'Grace Allen',
-    },
-    phone: '(512) 555-2017',
-    branch: 'Austin, TX',
-    logos: ['monetha.svg', 'slack.svg'],
-    labels: ['Entertainment', 'Streaming'],
-    switch: true,
-  },
-  {
-    id: '24',
-    user: {
-      avatar: '300-24.png',
-      userName: 'Aiden King',
-    },
-    phone: '(415) 555-8943',
-    branch: 'San Francisco, CA',
-    logos: ['google-calendar.svg', 'slack.svg'],
-    labels: ['Project Management', 'Collaboration'],
-    switch: true,
-  },
-  {
-    id: '25',
-    user: {
-      avatar: '300-25.png',
-      userName: 'Avery Green',
-    },
-    phone: '(503) 555-1234',
-    branch: 'Portland, OR',
-    logos: ['google-calendar.svg', 'google-analytics.svg'],
-    labels: ['Coordinator', 'Scheduler'],
-    switch: false,
-  },
-  {
-    id: '26',
-    user: {
-      avatar: '300-26.png',
-      userName: 'Ella White',
-    },
-    phone: '(702) 555-5678',
-    branch: 'Las Vegas, NV',
-    logos: ['twitch-purple.svg', 'google-analytics.svg'],
-    labels: ['Cloud Storage', 'Files'],
-    switch: true,
-  },
-  {
-    id: '27',
-    user: {
-      avatar: '300-27.png',
-      userName: 'Henry King',
-    },
-    phone: '(415) 555-7890',
-    branch: 'San Francisco, CA',
-    logos: ['sololearn.svg', 'monetha.svg'],
-    labels: ['CRM', 'Sales'],
-    switch: true,
-  },
-  {
-    id: '28',
-    user: {
-      avatar: '300-28.png',
-      userName: 'Olivia Green',
-    },
-    phone: '(312) 555-3456',
-    branch: 'Chicago, IL',
-    logos: ['google-analytics.svg', 'jira.svg'],
-    labels: ['Social Media', 'Marketing'],
-    switch: false,
-  },
-  {
-    id: '29',
-    user: {
-      avatar: '300-29.png',
-      userName: 'Mason Lewis',
-    },
-    phone: '(213) 555-7891',
-    branch: 'Los Angeles, CA',
-    logos: ['slack.svg', 'twitch-purple.svg'],
-    labels: ['Professional Network', 'Recruitment'],
-    switch: true,
-  },
-  {
-    id: '30',
-    user: {
-      avatar: '300-30.png',
-      userName: 'Sophia Lee',
-    },
-    phone: '(702) 555-1234',
-    branch: 'Las Vegas, NV',
-    logos: ['google-analytics.svg', 'jira.svg'],
-    labels: ['Communications', 'Collaboration'],
-    switch: false,
-  },
-];
-
-function ActionsCell({ row }: { row: Row<IData> }) {
+function ActionsCell({ row }: { row: Row<IConnection> }) {
   const { copyToClipboard } = useCopyToClipboard();
   const handleCopyId = () => {
-    copyToClipboard(String(row.original.id));
-    const message = `User ID successfully copied: ${row.original.id}`;
+    copyToClipboard(String(row.original.person.id));
+    const message = `User ID successfully copied: ${row.original.person.id}`;
     toast.custom(
       (t) => (
         <Alert
@@ -483,33 +139,46 @@ const Users = () => {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<SortingState>([
-    { id: 'users', desc: false },
+    { id: 'person', desc: false },
   ]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-  const [sortOrder, setSortOrder] = useState<string>('latest');
-  const [users, setUsers] = useState<IData[]>(data);
+  const [sortOrder, setSortOrder] = useState<string>('newest');
+  const [connections, setConnections] = useState<IConnection[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleToggle = (index: number) => {
-    setUsers((prevUsers) => {
-      const updatedUsers = [...prevUsers];
-      updatedUsers[index] = {
-        ...updatedUsers[index],
-        switch: !updatedUsers[index].switch,
-      };
-      return updatedUsers;
-    });
-  };
+  useEffect(() => {
+    const fetchConnections = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get<IConnection[]>(
+          `${API_URL}/persons/related-persons`,
+        );
+        const result: IConnection[] = await response.data;
+        setConnections(result);
+      } catch (e) {
+        const errorMessage =
+          e instanceof Error ? e.message : 'An unknown error occurred';
+        setError(errorMessage);
+        toast.error(`Error fetching connections: ${errorMessage}`);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchConnections();
+  }, []);
 
   const filteredData = useMemo(() => {
-    let filtered = users;
+    let filtered = connections;
 
-    // Filter by status (2FA Enabled/Disabled)
+    // Filter by gender
     if (selectedStatuses.length > 0) {
       filtered = filtered.filter((item) => {
-        const status = item.switch ? '2FA Enabled' : '2FA Disabled';
-        return selectedStatuses.includes(status);
+        return selectedStatuses.includes(item.person.gender);
       });
     }
 
@@ -518,43 +187,47 @@ const Users = () => {
       const searchLower = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (item) =>
-          item.user.userName.toLowerCase().includes(searchLower) ||
-          item.phone.toLowerCase().includes(searchLower) ||
-          item.branch.toLowerCase().includes(searchLower) ||
-          item.labels.some((label) =>
-            label.toLowerCase().includes(searchLower),
-          ),
+          `${item.person.firstName} ${item.person.lastName}`
+            .toLowerCase()
+            .includes(searchLower) ||
+          item.person.placeOfBirth.city.toLowerCase().includes(searchLower) ||
+          item.person.placeOfBirth.country
+            .toLowerCase()
+            .includes(searchLower) ||
+          item.relationshipPath.toLowerCase().includes(searchLower),
       );
     }
 
     // Apply sorting based on sortOrder
-    if (sortOrder === 'latest') {
+    if (sortOrder === 'newest') {
+      // Newest born
       filtered = [...filtered].sort(
-        (a, b) => new Date(b.id).getTime() - new Date(a.id).getTime(),
-      );
-    } else if (sortOrder === 'older') {
-      filtered = [...filtered].sort(
-        (a, b) => new Date(a.id).getTime() - new Date(b.id).getTime(),
+        (a, b) =>
+          new Date(b.person.dateOfBirth).getTime() -
+          new Date(a.person.dateOfBirth).getTime(),
       );
     } else if (sortOrder === 'oldest') {
+      // Oldest born
       filtered = [...filtered].sort(
-        (a, b) => new Date(a.id).getTime() - new Date(b.id).getTime(),
+        (a, b) =>
+          new Date(a.person.dateOfBirth).getTime() -
+          new Date(b.person.dateOfBirth).getTime(),
       );
     }
 
     return filtered;
-  }, [users, searchQuery, selectedStatuses, sortOrder]);
+  }, [connections, searchQuery, selectedStatuses, sortOrder]);
 
   const statusCounts = useMemo(() => {
-    return users.reduce(
+    return connections.reduce(
       (acc, item) => {
-        const status = item.switch ? '2FA Enabled' : '2FA Disabled';
+        const status = item.person.gender;
         acc[status] = (acc[status] || 0) + 1;
         return acc;
       },
       {} as Record<string, number>,
     );
-  }, [users]);
+  }, [connections]);
 
   const handleStatusChange = (checked: boolean, value: string) => {
     setSelectedStatuses((prev = []) =>
@@ -562,149 +235,157 @@ const Users = () => {
     );
   };
 
-  const columns = useMemo<ColumnDef<IData>[]>(
+  const columns = useMemo<ColumnDef<IConnection>[]>(
     () => [
       {
-        accessorKey: 'id',
-        accessorFn: (row) => row.id,
+        id: 'select',
         header: () => <DataGridTableRowSelectAll />,
         cell: ({ row }) => <DataGridTableRowSelect row={row} />,
         enableSorting: false,
         enableHiding: false,
         enableResizing: false,
         size: 51,
-        meta: {
-          cellClassName: '',
-        },
       },
       {
-        id: 'users',
-        accessorFn: (row) => row.user,
+        id: 'person',
+        accessorFn: (row) => `${row.person.firstName} ${row.person.lastName}`,
         header: ({ column }) => (
-          <DataGridColumnHeader title="Users" column={column} />
+          <DataGridColumnHeader title="Person" column={column} />
         ),
         cell: ({ row }) => (
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center font-medium rounded-full size-10 bg-muted text-muted-foreground">
+              {row.original.person.firstName.charAt(0)}
+              {row.original.person.lastName.charAt(0)}
+            </div>
+            <div className="flex flex-col">
+              <Link
+                to="#"
+                className="font-medium text-foreground hover:text-primary"
+              >
+                {`${row.original.person.firstName} ${row.original.person.lastName}`}
+              </Link>
+              {row.original.person.nickNames &&
+                row.original.person.nickNames.length > 0 && (
+                  <span className="text-xs text-muted-foreground">
+                    {row.original.person.nickNames.join(', ')}
+                  </span>
+                )}
+            </div>
+          </div>
+        ),
+        enableSorting: true,
+        size: 220,
+      },
+      {
+        id: 'relationship',
+        accessorFn: (row) => row.relationshipPath,
+        header: ({ column }) => (
+          <DataGridColumnHeader title="Relationship Path" column={column} />
+        ),
+        cell: ({ row }) => {
+          const path = row.original.relationshipPath;
+          // Splits by -(TYPE)->, capturing TYPE. Resulting array alternates names and types.
+          const parts = path.split(/-\((.*?)\)->/);
+
+          return (
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+              {parts.map((part, i) => {
+                const isName = i % 2 === 0;
+                const isLast = i === parts.length - 1;
+
+                // Filter out empty strings that can result from splitting
+                if (part.trim() === '') return null;
+
+                return (
+                  <React.Fragment key={i}>
+                    {isName ? (
+                      <span className="font-medium text-foreground text-xs">
+                        {part.trim()}
+                      </span>
+                    ) : (
+                      <Badge variant="secondary" size="xs" className="text-xs">
+                        <span className="text-xs">{part.trim()}</span>
+                      </Badge>
+                    )}
+                    {!isLast && (
+                      <span className="text-muted-foreground text-xs">
+                        &rarr;
+                      </span>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          );
+        },
+        enableSorting: true,
+        size: 250,
+      },
+      {
+        id: 'birthPlace',
+        accessorFn: (row) =>
+          `${row.person.placeOfBirth.city}, ${row.person.placeOfBirth.country}`,
+        header: ({ column }) => (
+          <DataGridColumnHeader title="Birth Place" column={column} />
+        ),
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2">
             <img
-              src={toAbsoluteUrl(`/media/avatars/${row.original.user.avatar}`)}
-              className="rounded-full size-7 shrink-0"
-              alt={`${row.original.user.userName}`}
+              src={toAbsoluteUrl(
+                `/media/flags/${row.original.person.placeOfBirth.country.toLowerCase().replace(/ /g, '-')}.svg`,
+              )}
+              className="size-5 shrink-0"
+              alt={row.original.person.placeOfBirth.country}
             />
-            <Link
-              to="#"
-              className="text-sm font-medium text-mono hover:text-primary-active"
-            >
-              {row.original.user.userName}
-            </Link>
-          </div>
-        ),
-        enableSorting: true,
-        size: 200,
-        meta: {
-          headerClassName: '',
-        },
-      },
-      {
-        id: 'phone',
-        accessorFn: (row) => row.phone,
-        header: ({ column }) => (
-          <DataGridColumnHeader title="Phone" column={column} />
-        ),
-        cell: ({ row }) => (
-          <span className="font-normal text-foreground">
-            {row.original.phone}
-          </span>
-        ),
-        enableSorting: true,
-        size: 165,
-        meta: {
-          headerClassName: '',
-        },
-      },
-      {
-        id: 'branch',
-        accessorFn: (row) => row.branch,
-        header: ({ column }) => (
-          <DataGridColumnHeader title="Branch" column={column} />
-        ),
-        cell: ({ row }) => (
-          <span className="text-foreground font-normal">
-            {row.original.branch}
-          </span>
-        ),
-        enableSorting: true,
-        size: 165,
-        meta: {
-          headerClassName: '',
-        },
-      },
-      {
-        id: 'image',
-        accessorFn: (row) => row.logos,
-        header: ({ column }) => (
-          <DataGridColumnHeader title="Connected Apps" column={column} />
-        ),
-        cell: ({ row }) => (
-          <div className="flex items-center text-foreground font-normal gap-1.5">
-            {Array.isArray(row.original.logos) &&
-              row.original.logos.map((logo, index) => (
-                <img
-                  key={index}
-                  src={toAbsoluteUrl(`/media/brand-logos/${logo}`)}
-                  className="size-[18px] shrink-0"
-                  alt="image"
-                />
-              ))}
+            <span className="font-normal text-foreground">
+              {row.original.person.placeOfBirth.city}
+            </span>
           </div>
         ),
         enableSorting: true,
         size: 165,
-        meta: {
-          headerClassName: '',
-        },
       },
       {
-        id: 'label',
-        accessorFn: (row) => row.labels,
+        id: 'lifeSpan',
+        accessorFn: (row) => row.person.dateOfBirth,
         header: ({ column }) => (
-          <DataGridColumnHeader title="Tags" column={column} />
+          <DataGridColumnHeader title="Life Span" column={column} />
         ),
         cell: ({ row }) => (
-          <div className="flex items-center text-foreground font-normal gap-1.5">
-            {Array.isArray(row.original.labels) &&
-              row.original.labels.map((label, index) => (
-                <span key={index} className="badge badge-sm">
-                  {label}
-                </span>
-              ))}
+          <div className="flex flex-col">
+            <span className="font-normal text-foreground">
+              {new Date(row.original.person.dateOfBirth).toLocaleDateString()}
+            </span>
+            {row.original.person.dateOfDeath && (
+              <span className="text-xs text-muted-foreground">
+                Died:{' '}
+                {new Date(row.original.person.dateOfDeath).toLocaleDateString()}
+              </span>
+            )}
           </div>
         ),
         enableSorting: true,
-        size: 225,
-        meta: {
-          headerClassName: '',
-        },
+        size: 150,
       },
       {
-        id: 'switch',
-        accessorFn: (row) => row.switch,
+        id: 'gender',
+        accessorFn: (row) => row.person.gender,
         header: ({ column }) => (
-          <DataGridColumnHeader title="Enforce 2FA" column={column} />
+          <DataGridColumnHeader title="Gender" column={column} />
         ),
         cell: ({ row }) => (
-          <div className="flex items-center mb-2">
-            <Switch
-              defaultChecked={row.original.switch}
-              onChange={() => handleToggle(row.index)}
-              size="sm"
-            />
-          </div>
+          <Badge
+            variant={
+              row.original.person.gender === 'MALE' ? 'default' : 'secondary'
+            }
+          >
+            {row.original.person.gender.charAt(0) +
+              row.original.person.gender.slice(1).toLowerCase()}
+          </Badge>
         ),
         enableSorting: true,
-        size: 130,
-        meta: {
-          headerClassName: '',
-        },
+        size: 100,
       },
       {
         id: 'actions',
@@ -712,9 +393,6 @@ const Users = () => {
         cell: ({ row }) => <ActionsCell row={row} />,
         enableSorting: false,
         size: 60,
-        meta: {
-          headerClassName: '',
-        },
       },
     ],
     [],
@@ -724,7 +402,7 @@ const Users = () => {
     columns,
     data: filteredData,
     pageCount: Math.ceil((filteredData?.length || 0) / pagination.pageSize),
-    getRowId: (row: IData) => String(row.id),
+    getRowId: (row: IConnection) => String(row.person.id),
     state: {
       pagination,
       sorting,
@@ -799,7 +477,7 @@ const Users = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Status
+                    Gender
                     {selectedStatuses.length > 0 && (
                       <Badge size="sm" variant="outline">
                         {selectedStatuses.length}
@@ -826,7 +504,7 @@ const Users = () => {
                             htmlFor={status}
                             className="grow flex items-center justify-between font-normal gap-1.5"
                           >
-                            {status}
+                            {status.charAt(0) + status.slice(1).toLowerCase()}
                             <span className="text-muted-foreground">
                               {statusCounts[status]}
                             </span>
@@ -842,7 +520,7 @@ const Users = () => {
                   <Button variant="outline">
                     <Filter />
                     Sort Order
-                    {sortOrder !== 'latest' && (
+                    {sortOrder !== 'newest' && (
                       <Badge size="sm" variant="outline">
                         {sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
                       </Badge>
@@ -855,7 +533,7 @@ const Users = () => {
                       Sort By
                     </div>
                     <div className="space-y-3">
-                      {['latest', 'older', 'oldest'].map((order) => (
+                      {['newest', 'oldest'].map((order) => (
                         <div key={order} className="flex items-center gap-2.5">
                           <Checkbox
                             id={order}
@@ -881,10 +559,25 @@ const Users = () => {
           <Toolbar />
         </CardHeader>
         <CardTable>
-          <ScrollArea>
-            <DataGridTable />
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+          {isLoading ? (
+            <div className="flex items-center justify-center p-10">
+              <Loader2 className="mr-2 h-16 w-16 animate-spin" />
+            </div>
+          ) : error ? (
+            <div className="p-10">
+              <Alert variant="destructive">
+                <AlertIcon>
+                  <X />
+                </AlertIcon>
+                <AlertTitle>Error: {error}</AlertTitle>
+              </Alert>
+            </div>
+          ) : (
+            <ScrollArea>
+              <DataGridTable />
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+          )}
         </CardTable>
         <CardFooter>
           <DataGridPagination />

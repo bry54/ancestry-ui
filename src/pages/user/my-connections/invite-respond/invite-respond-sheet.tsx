@@ -110,7 +110,9 @@ export function InviteRespondSheet({
       try {
         setLoading(true);
         setError(null);
-        const response = await axios.get(`${API_URL}/invitations/${token}`);
+        const response = await axios.get(
+          `${API_URL}/invitations/fetch/${token}`,
+        );
         const invitation = response.data;
         const sourceDetails = setupPersonSummary(invitation.sourcePerson);
         setItems(sourceDetails);
