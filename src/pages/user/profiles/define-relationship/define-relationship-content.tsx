@@ -3,7 +3,15 @@ import { DefineRelationshipSheet } from '@/pages/user';
 import { ProfilesListPage } from '@/pages/user/profiles/profiles-list';
 import { useNavigate } from 'react-router-dom';
 
-export function DefineRelationshipContent() {
+interface DefineRelationshipContentProps {
+  target: string;
+  source: string;
+}
+
+export function DefineRelationshipContent(
+  props: DefineRelationshipContentProps,
+) {
+  const { target, source } = props;
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
 
@@ -23,6 +31,8 @@ export function DefineRelationshipContent() {
         open={open}
         onOpenChange={handleOpenChange}
         onRelationshipDefined={handleOnSuccess}
+        source={source}
+        target={target}
       />
     </>
   );

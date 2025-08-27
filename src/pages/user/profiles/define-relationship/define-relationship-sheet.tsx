@@ -104,12 +104,14 @@ function PersonCombobox({
   onChange,
   placeholder,
   isLoading,
+  disabled,
 }: {
   persons: Person[];
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
   isLoading?: boolean;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const selectedPerson = persons.find((person) => person.id === value);
@@ -122,7 +124,7 @@ function PersonCombobox({
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between font-normal"
-          disabled={isLoading}
+          disabled={isLoading || disabled}
         >
           {isLoading
             ? 'Loading...'
@@ -170,12 +172,16 @@ interface DefineRelationshipSheetProps {
   open: boolean;
   onOpenChange: () => void;
   onRelationshipDefined: () => void;
+  target: string;
+  source: string;
 }
 
 export function DefineRelationshipSheet({
   open,
   onOpenChange,
   onRelationshipDefined,
+  target,
+  source,
 }: DefineRelationshipSheetProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -187,8 +193,8 @@ export function DefineRelationshipSheet({
   const form = useForm<DefineRelationshipSchemaType>({
     resolver: zodResolver(defineRelationshipSchema),
     defaultValues: {
-      sourceId: '',
-      targetId: '',
+      sourceId: source ?? '',
+      targetId: target ?? '',
     },
   });
 
@@ -218,7 +224,6 @@ export function DefineRelationshipSheet({
   }, [open, user?.isAdmin]);
 
   async function onSubmit(values: DefineRelationshipSchemaType) {
-    console.log(values);
     try {
       setIsProcessing(true);
       setError(null);
@@ -306,6 +311,7 @@ export function DefineRelationshipSheet({
                 <CardContent className="flex flex-col space-y-4 p-5 p-0">
                   <div className="flex flex-col sm:flex-row gap-4">
                     <FormField
+                      disabled={!!source}
                       control={form.control}
                       name="sourceId"
                       render={({ field }) => (
@@ -317,12 +323,14 @@ export function DefineRelationshipSheet({
                             onChange={field.onChange}
                             placeholder="Select source person..."
                             isLoading={isFetchingPersons}
+                            disabled={field.disabled}
                           />
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                     <FormField
+                      disabled={!!target}
                       control={form.control}
                       name="targetId"
                       render={({ field }) => (
@@ -336,6 +344,7 @@ export function DefineRelationshipSheet({
                             onChange={field.onChange}
                             placeholder="Select target person..."
                             isLoading={isFetchingPersons}
+                            disabled={field.disabled}
                           />
                           <FormMessage />
                         </FormItem>

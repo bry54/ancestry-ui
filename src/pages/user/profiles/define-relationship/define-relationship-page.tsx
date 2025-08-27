@@ -5,9 +5,12 @@ import { DefineRelationshipContent } from './define-relationship-content.tsx';
 export function DefineRelationshipPage() {
   const location = useLocation();
 
+  const target = location.state?.targetPerson;
+  const source = location.state?.sourcePerson;
+
   return (
     <Container>
-      <DefineRelationshipContent />
+      <DefineRelationshipContent target={target} source={source} />
     </Container>
   );
 }
