@@ -27,9 +27,13 @@ export function ProfilesListPage() {
             </ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
-            <Button variant="outline">Upload CSV</Button>
             <Button variant="primary">
               <Link to={'/user/profiles/add'}>Add Person</Link>
+            </Button>
+            <Button className="bg-purple-500 hover:bg-purple-600 text-white">
+              <Link to={'/user/profiles/relationship'}>
+                Define Relationship
+              </Link>
             </Button>
           </ToolbarActions>
         </Toolbar>

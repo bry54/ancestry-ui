@@ -155,7 +155,7 @@ const Users = () => {
         const response = await axios.get<IConnection[]>(
           `${API_URL}/persons/related-persons`,
         );
-        const result: IConnection[] = await response.data;
+        const result: IConnection[] = response.data;
         setConnections(result);
       } catch (e) {
         const errorMessage =
@@ -448,9 +448,6 @@ const Users = () => {
 
     return (
       <CardToolbar>
-        <Button>
-          <Settings2 /> Filters
-        </Button>
         <DataGridColumnVisibility
           table={table}
           trigger={
