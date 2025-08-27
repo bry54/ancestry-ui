@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { API_URL } from '@/auth/adapters/jwt-auth-adapter.ts';
 import { useAuth } from '@/auth/context/auth-context.ts';
+import { RelationshipCombobox } from '@/pages/utilities/relationship-select.tsx';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import {
@@ -153,71 +154,6 @@ function PersonCombobox({
                     )}
                   />
                   {`${person.firstName} ${person.lastName}`}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
-function RelationshipCombobox({
-  value,
-  onChange,
-  placeholder,
-}: {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder: string;
-}) {
-  const [open, setOpen] = useState(false);
-
-  const relationships = Object.entries(RelationshipType).map(([key, val]) => ({
-    value: val,
-    label: RelationshipLabels[val],
-  }));
-
-  const selectedRelationship = relationships.find((r) => r.value === value);
-
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between font-normal"
-        >
-          {selectedRelationship ? selectedRelationship.label : placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-        <Command>
-          <CommandInput placeholder="Search relationship..." />
-          <CommandEmpty>No relationship found.</CommandEmpty>
-          <CommandList>
-            <CommandGroup>
-              {relationships.map((relationship) => (
-                <CommandItem
-                  key={relationship.value}
-                  value={relationship.value}
-                  onSelect={() => {
-                    onChange(relationship.value);
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      'mr-2 h-4 w-4',
-                      value === relationship.value
-                        ? 'opacity-100'
-                        : 'opacity-0',
-                    )}
-                  />
-                  {relationship.label}
                 </CommandItem>
               ))}
             </CommandGroup>

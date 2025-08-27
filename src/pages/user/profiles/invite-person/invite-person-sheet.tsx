@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { API_URL } from '@/auth/adapters/jwt-auth-adapter.ts';
 import { IInvitePersonDto } from '@/pages/user';
+import { RelationshipCombobox } from '@/pages/utilities/relationship-select.tsx';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Empty } from 'antd';
 import axios from 'axios';
@@ -207,36 +208,13 @@ export function InvitePersonSheet({
                         control={form.control}
                         name="type"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Select relationship</FormLabel>
-                            <FormControl>
-                              <Select
-                                onValueChange={(value) => {
-                                  field.onChange(value);
-                                }}
-                                value={field.value}
-                              >
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select relationship" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {Object.entries(RelationshipType).map(
-                                    ([key, value]) => {
-                                      console.log(key, value);
-                                      return (
-                                        <SelectItem key={value} value={value}>
-                                          {capitalizeFirstLetter(
-                                            value
-                                              .toLowerCase()
-                                              .replace(/_/g, ' '),
-                                          )}
-                                        </SelectItem>
-                                      );
-                                    },
-                                  )}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
+                          <FormItem className="grow">
+                            <FormLabel>Relationship</FormLabel>
+                            <RelationshipCombobox
+                              value={field.value}
+                              onChange={field.onChange}
+                              placeholder="Select relationship"
+                            />
                             <FormMessage />
                           </FormItem>
                         )}
