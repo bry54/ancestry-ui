@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useMemo, useState } from 'react';
 import { API_URL } from '@/auth/adapters/jwt-auth-adapter.ts';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
@@ -300,11 +298,13 @@ const Users = () => {
                 return (
                   <React.Fragment key={i}>
                     {isName ? (
-                      <span className="font-medium text-foreground text-xs">
-                        {part.trim()}
-                      </span>
+                      <Badge variant="success" size="xs" appearance="light">
+                        <span className="font-medium text-foreground text-xs">
+                          {part.trim()}
+                        </span>
+                      </Badge>
                     ) : (
-                      <Badge variant="secondary" size="xs" className="text-xs">
+                      <Badge variant="info" size="xs" appearance="light">
                         <span className="text-xs">{part.trim()}</span>
                       </Badge>
                     )}
@@ -352,19 +352,42 @@ const Users = () => {
         header: ({ column }) => (
           <DataGridColumnHeader title="Life Span" column={column} />
         ),
-        cell: ({ row }) => (
-          <div className="flex flex-col">
-            <span className="font-normal text-foreground">
-              {new Date(row.original.person.dateOfBirth).toLocaleDateString()}
-            </span>
-            {row.original.person.dateOfDeath && (
-              <span className="text-xs text-muted-foreground">
-                Died:{' '}
-                {new Date(row.original.person.dateOfDeath).toLocaleDateString()}
+        cell: ({ row }) => {
+          const { dateOfBirth, dateOfDeath } = row.original.person;
+
+          const birthDate = new Date(dateOfBirth);
+          const deathDate = dateOfDeath ? new Date(dateOfDeath) : null;
+
+          // Helper to calculate age based on birth and death/current dates
+          const calculateAge = (dob: Date, dod: Date | null) => {
+            if (isNaN(dob.getTime())) return null;
+            const endDate = dod || new Date();
+            if (isNaN(endDate.getTime())) return null;
+
+            let age = endDate.getFullYear() - dob.getFullYear();
+            const m = endDate.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && endDate.getDate() < dob.getDate())) {
+              age--;
+            }
+            return age;
+          };
+
+          const age = calculateAge(birthDate, deathDate);
+
+          return (
+            <div className="flex flex-col gap-0.5">
+              <span className="font-medium text-foreground">
+                {birthDate.getFullYear()} &ndash;{' '}
+                {deathDate ? deathDate.getFullYear() : 'Present'}
               </span>
-            )}
-          </div>
-        ),
+              {age !== null && age >= 0 && (
+                <span className="text-xs text-muted-foreground">
+                  {deathDate ? `(Died at age ${age})` : `(Age ${age})`}
+                </span>
+              )}
+            </div>
+          );
+        },
         enableSorting: true,
         size: 150,
       },
@@ -376,8 +399,9 @@ const Users = () => {
         ),
         cell: ({ row }) => (
           <Badge
+            appearance="light"
             variant={
-              row.original.person.gender === 'MALE' ? 'default' : 'secondary'
+              row.original.person.gender === 'MALE' ? 'primary' : 'warning'
             }
           >
             {row.original.person.gender.charAt(0) +
