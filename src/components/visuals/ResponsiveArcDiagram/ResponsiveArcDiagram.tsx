@@ -3,7 +3,8 @@ import * as d3 from 'd3';
 
 interface Node {
   id: string;
-  group: number;
+  name: string;
+  group: string;
 }
 
 interface Link {
@@ -123,7 +124,7 @@ const ResponsiveArcDiagram: React.FC<ArcDiagramProps> = ({ data }) => {
       .attr('dy', '0.31em')
       .attr('text-anchor', 'start')
       .attr('font-size', 10)
-      .text((d) => d.id);
+      .text((d) => d.name); // Changed from d.id to d.name
 
     const highlight = (
       selectedNodeId: string | null,

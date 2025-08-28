@@ -1,6 +1,7 @@
 // Defines the structure for each node.
 export interface ArcNode {
   id: string;
+  name?: string;
 }
 
 // Defines the structure for each link.
