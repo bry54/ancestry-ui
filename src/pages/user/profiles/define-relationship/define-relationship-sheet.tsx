@@ -36,6 +36,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { InputAddon, InputGroup } from '@/components/ui/input.tsx';
 import {
   Popover,
   PopoverContent,
@@ -104,12 +105,14 @@ function PersonCombobox({
   onChange,
   placeholder,
   isLoading,
+  disabled,
 }: {
   persons: Person[];
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
   isLoading?: boolean;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const selectedPerson = persons.find((person) => person.id === value);
@@ -122,7 +125,7 @@ function PersonCombobox({
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between font-normal"
-          disabled={isLoading}
+          disabled={isLoading || disabled}
         >
           {isLoading
             ? 'Loading...'
@@ -170,12 +173,16 @@ interface DefineRelationshipSheetProps {
   open: boolean;
   onOpenChange: () => void;
   onRelationshipDefined: () => void;
+  target: string;
+  source: string;
 }
 
 export function DefineRelationshipSheet({
   open,
   onOpenChange,
   onRelationshipDefined,
+  target,
+  source,
 }: DefineRelationshipSheetProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -187,8 +194,8 @@ export function DefineRelationshipSheet({
   const form = useForm<DefineRelationshipSchemaType>({
     resolver: zodResolver(defineRelationshipSchema),
     defaultValues: {
-      sourceId: '',
-      targetId: '',
+      sourceId: source ?? '',
+      targetId: target ?? '',
     },
   });
 
@@ -225,8 +232,8 @@ export function DefineRelationshipSheet({
       setSuccessMessage(null);
 
       const dto: IDefineRelationDto = {
-        targetId: values.targetId,
-        sourceId: values.sourceId,
+        targetId: target ?? values.targetId,
+        sourceId: source ?? values.sourceId,
         metadata: {
           type: values.type as RelationshipType,
           lineageSide: values.lineageSide as Any,
@@ -265,7 +272,7 @@ export function DefineRelationshipSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:w-[620px] sm:max-w-none inset-5 start-auto h-auto rounded-lg p-0 [&_[data-slot=sheet-close]]:top-4.5 [&_[data-slot=sheet-close]]:end-5">
+      <SheetContent className="sm:w-[420px] sm:max-w-none inset-5 start-auto h-auto rounded-lg p-0 [&_[data-slot=sheet-close]]:top-4.5 [&_[data-slot=sheet-close]]:end-5">
         <SheetHeader className="border-b py-3.5 px-5 border-border">
           <SheetTitle>Define Relationship</SheetTitle>
         </SheetHeader>
@@ -304,30 +311,14 @@ export function DefineRelationshipSheet({
                 )}
 
                 <CardContent className="flex flex-col space-y-4 p-5 p-0">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <FormField
-                      control={form.control}
-                      name="sourceId"
-                      render={({ field }) => (
-                        <FormItem className="grow flex flex-col">
-                          <FormLabel>Source Person</FormLabel>
-                          <PersonCombobox
-                            persons={persons}
-                            value={field.value}
-                            onChange={field.onChange}
-                            placeholder="Select source person..."
-                            isLoading={isFetchingPersons}
-                          />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="targetId"
-                      render={({ field }) => (
-                        <FormItem className="grow flex flex-col">
-                          <FormLabel>Target Person</FormLabel>
+                  <FormField
+                    disabled={!!target}
+                    control={form.control}
+                    name="targetId"
+                    render={({ field }) => (
+                      <FormItem className="grow flex flex-col">
+                        <FormLabel>Target Person</FormLabel>
+                        <InputGroup>
                           <PersonCombobox
                             persons={persons.filter(
                               (p) => p.id !== form.watch('sourceId'),
@@ -336,35 +327,61 @@ export function DefineRelationshipSheet({
                             onChange={field.onChange}
                             placeholder="Select target person..."
                             isLoading={isFetchingPersons}
+                            disabled={field.disabled}
                           />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Separator />
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <FormField
-                      control={form.control}
-                      name="type"
-                      render={({ field }) => (
-                        <FormItem className="grow">
-                          <FormLabel>Relationship</FormLabel>
+                          <InputAddon>is</InputAddon>
+                        </InputGroup>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="type"
+                    render={({ field }) => (
+                      <FormItem className="grow">
+                        <FormLabel>Relationship</FormLabel>
+                        <InputGroup>
                           <RelationshipCombobox
                             value={field.value}
                             onChange={field.onChange}
                             placeholder="Select relationship"
                           />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="lineageSide"
-                      render={({ field }) => (
-                        <FormItem className="grow">
-                          <FormLabel>Lineage Side</FormLabel>
+                          <InputAddon>of</InputAddon>
+                        </InputGroup>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    disabled={!!source}
+                    control={form.control}
+                    name="sourceId"
+                    render={({ field }) => (
+                      <FormItem className="grow flex flex-col">
+                        <FormLabel>Source Person</FormLabel>
+                        <InputGroup>
+                          <PersonCombobox
+                            persons={persons}
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="Select source person..."
+                            isLoading={isFetchingPersons}
+                            disabled={field.disabled}
+                          />
+                          <InputAddon>on</InputAddon>
+                        </InputGroup>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="lineageSide"
+                    render={({ field }) => (
+                      <FormItem className="grow">
+                        <FormLabel>Lineage Side</FormLabel>
+                        <InputGroup>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
@@ -384,12 +401,14 @@ export function DefineRelationshipSheet({
                               ))}
                             </SelectContent>
                           </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
+                          <InputAddon>Side</InputAddon>
+                        </InputGroup>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Separator />
+                  <div className="flex flex-col sm:flex-row gap-4"></div>
                   {/* --- Relationship Summary --- */}
                   {showSummary && (
                     <div className="!mt-6 p-3 bg-muted/50 border border-border rounded-md text-sm text-muted-foreground text-center">

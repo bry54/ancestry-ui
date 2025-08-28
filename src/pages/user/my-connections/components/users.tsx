@@ -355,11 +355,12 @@ const Users = () => {
         cell: ({ row }) => {
           const { dateOfBirth, dateOfDeath } = row.original.person;
 
-          const birthDate = new Date(dateOfBirth);
+          const birthDate = dateOfBirth ? new Date(dateOfBirth) : null;
           const deathDate = dateOfDeath ? new Date(dateOfDeath) : null;
 
           // Helper to calculate age based on birth and death/current dates
-          const calculateAge = (dob: Date, dod: Date | null) => {
+          const calculateAge = (_dob: Date | null, dod: Date | null) => {
+            const dob = _dob || new Date();
             if (isNaN(dob.getTime())) return null;
             const endDate = dod || new Date();
             if (isNaN(endDate.getTime())) return null;
@@ -377,7 +378,7 @@ const Users = () => {
           return (
             <div className="flex flex-col gap-0.5">
               <span className="font-medium text-foreground">
-                {birthDate.getFullYear()} &ndash;{' '}
+                {birthDate ? birthDate.getFullYear() : ' Unknown '} {' - '}
                 {deathDate ? deathDate.getFullYear() : 'Present'}
               </span>
               {age !== null && age >= 0 && (

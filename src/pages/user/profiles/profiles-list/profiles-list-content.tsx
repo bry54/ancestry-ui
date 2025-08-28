@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { API_URL } from '@/auth/adapters/jwt-auth-adapter';
 import { useAuth } from '@/auth/context/auth-context.ts';
 import { CardUserMini } from '@/partials/cards';
@@ -8,11 +8,25 @@ import {
 } from '@remixicon/react';
 import { Empty, Result, Spin } from 'antd';
 import axios from 'axios';
-import { Eye, Search, Trash2, UserPlus } from 'lucide-react';
+import {
+  ChevronsLeftRightEllipsis,
+  ChevronsLeftRightEllipsisIcon,
+  Eye,
+  Search,
+  Send,
+  Trash2,
+  UserPlus,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Any } from '@/lib/interfaces';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip.tsx';
 
 export interface IAvatar {
   className: string;
@@ -24,6 +38,7 @@ export interface IAvatar {
 
 export interface ICardActions {
   onInviteAction: () => void;
+  onDefineRelationshipAction: () => void;
 }
 
 export interface IMiniCardsContentItem {
@@ -34,23 +49,76 @@ export interface IMiniCardsContentItem {
   verify: boolean;
 }
 
+export interface ToolTippedButtonProps {
+  button: React.ReactNode;
+  tooltipContent: string;
+}
+
 type IMiniCardsContentItems = Array<IMiniCardsContentItem>;
 
+const ToolTippedButton = (props: ToolTippedButtonProps) => {
+  const { button, tooltipContent } = props;
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipContent>{tooltipContent}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
 const CardActions = (props: ICardActions) => {
-  const { onInviteAction } = props;
+  const { onInviteAction, onDefineRelationshipAction } = props;
   return (
     <div className="bg-neutral-50 dark:bg-neutral-800 flex justify-around items-center p-0">
-      <Button variant="ghost" size="icon" onClick={onInviteAction}>
-        <UserPlus className="h-4 w-4 text-blue-500" />
-      </Button>
+      <ToolTippedButton
+        button={
+          <Button variant="ghost" size="icon" onClick={onInviteAction}>
+            <Send className="h-4 w-4 text-blue-500" />
+          </Button>
+        }
+        tooltipContent="Invite to join"
+      />
       <span className="text-gray-300">|</span>
-      <Button variant="ghost" size="icon">
-        <Eye className="h-4 w-4 text-yellow-500" />
-      </Button>
+      <ToolTippedButton
+        button={
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onDefineRelationshipAction}
+          >
+            <ChevronsLeftRightEllipsis className="h-4 w-4 text-purple-500" />
+          </Button>
+        }
+        tooltipContent="Relate"
+      />
       <span className="text-gray-200">|</span>
-      <Button variant="ghost" size="icon">
-        <Trash2 className="h-4 w-4 text-red-500" />
-      </Button>
+      <ToolTippedButton
+        button={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="flex flex-col items-center justify-center"
+          >
+            <Eye className="h-4 w-4 text-yellow-500" />
+          </Button>
+        }
+        tooltipContent="View Details"
+      />
+      <span className="text-gray-200">|</span>
+      <ToolTippedButton
+        button={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="flex flex-col items-center justify-center"
+          >
+            <Trash2 className="h-4 w-4 text-red-500" />
+          </Button>
+        }
+        tooltipContent="Delete"
+      />
     </div>
   );
 };
@@ -114,6 +182,17 @@ export function ProfilesListContent() {
       });
     };
 
+    const defineRelationshipBtn = async () => {
+      const response = await axios.get(`${API_URL}/user/${user?.id}`);
+
+      navigate('/user/profiles/relationship', {
+        state: {
+          sourcePerson: response?.data.personId,
+          targetPerson: item.data.id,
+        },
+      });
+    };
+
     return (
       <CardUserMini
         avatar={item.avatar}
@@ -121,7 +200,12 @@ export function ProfilesListContent() {
         email={item.email}
         verify={item.verify}
         key={index}
-        footer={<CardActions onInviteAction={inviteBtnAction} />}
+        footer={
+          <CardActions
+            onInviteAction={inviteBtnAction}
+            onDefineRelationshipAction={defineRelationshipBtn}
+          />
+        }
       />
     );
   };
