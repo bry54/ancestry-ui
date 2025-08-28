@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import { capitalizeFirstLetter } from '@/lib/helpers';
 
 interface Node {
   id: string;
@@ -11,6 +12,7 @@ interface Link {
   source: string;
   target: string;
   value: number;
+  type: string; // Added for the label
 }
 
 export interface IArcDiagramData {
@@ -67,6 +69,7 @@ const ResponsiveArcDiagram: React.FC<ArcDiagramProps> = ({ data }) => {
       source: nodeById.get(d.source) as Node,
       target: nodeById.get(d.target) as Node,
       value: d.value,
+      type: d.type, // Ensure type is carried over
     }));
 
     const x = d3
@@ -92,7 +95,8 @@ const ResponsiveArcDiagram: React.FC<ArcDiagramProps> = ({ data }) => {
       .selectAll('path')
       .data(links)
       .join('path')
-      .attr('stroke', (d) => color(d.source.group.toString()))
+      .attr('id', (d, i) => `link-path-${i}`) // 🔹 Assign an ID to each path
+      .attr('stroke', (d: any) => color(d.source.group.toString()))
       .attr('d', (d: any) => {
         const startX = x(d.source.id);
         const endX = x(d.target.id);
@@ -101,6 +105,28 @@ const ResponsiveArcDiagram: React.FC<ArcDiagramProps> = ({ data }) => {
         const sweepFlag = startX < endX ? 0 : 1;
         return `M${startX},${midY} A${r},${r} 0 0,${sweepFlag} ${endX},${midY}`;
       });
+
+    // 🔹 Add labels to the links
+    const linkLabels = g
+      .append('g')
+      .attr('fill', 'currentColor')
+      .attr('font-size', 8)
+      .attr('font-family', 'sans-serif')
+      .selectAll('text')
+      .data(links)
+      .join('text')
+      .attr('dy', -4); // Move text up from the arc path
+
+    linkLabels
+      .append('textPath')
+      .attr('href', (d, i) => `#link-path-${i}`) // Link text to a path
+      .attr('startOffset', '50%') // Center the text on the path
+      .style('text-anchor', 'middle')
+      .text((d: any) =>
+        capitalizeFirstLetter(
+          d.type ? d.type.toLowerCase().replace(/_/g, ' ') : '',
+        ),
+      );
 
     const nodeCircles = g
       .append('g')
@@ -119,70 +145,60 @@ const ResponsiveArcDiagram: React.FC<ArcDiagramProps> = ({ data }) => {
       .join('text')
       .attr(
         'transform',
-        (d) => `translate(${x(d.id)},${innerHeight / 2 - 10})rotate(-45)`, //-10 to add some margin on the node labels
+        (d) => `translate(${x(d.id)},${innerHeight / 2 - 10})rotate(-45)`,
       )
       .attr('dy', '0.31em')
       .attr('text-anchor', 'start')
       .attr('font-size', 10)
-      .text((d) => d.name); // Changed from d.id to d.name
+      .text((d) => d.name);
 
     const highlight = (
       selectedNodeId: string | null,
       selectedLink: Link | null,
     ) => {
-      nodeCircles.attr('opacity', (d: any) => {
-        if (!selectedNodeId && !selectedLink) return 1;
+      const isDimmed = (d: any) => {
+        if (!selectedNodeId && !selectedLink) return false;
         if (
           selectedNodeId &&
           (d.id === selectedNodeId ||
             isConnected(d, nodeById.get(selectedNodeId) as Node))
         )
-          return 1;
+          return false;
         if (
           selectedLink &&
           (d.id === selectedLink.source.id || d.id === selectedLink.target.id)
         )
-          return 1;
-        return 0.1;
-      });
+          return false;
+        return true;
+      };
 
-      nodeLabels.attr('opacity', (d: any) => {
-        if (!selectedNodeId && !selectedLink) return 1;
-        if (
-          selectedNodeId &&
-          (d.id === selectedNodeId ||
-            isConnected(d, nodeById.get(selectedNodeId) as Node))
-        )
-          return 1;
-        if (
-          selectedLink &&
-          (d.id === selectedLink.source.id || d.id === selectedLink.target.id)
-        )
-          return 1;
-        return 0.1;
-      });
-
-      linkPaths.attr('opacity', (l: any) => {
-        if (!selectedNodeId && !selectedLink) return 1;
+      const isLinkDimmed = (l: any) => {
+        if (!selectedNodeId && !selectedLink) return false;
         if (
           selectedNodeId &&
           (l.source.id === selectedNodeId || l.target.id === selectedNodeId)
         )
-          return 1;
+          return false;
         if (
           selectedLink &&
           l.source.id === selectedLink.source.id &&
           l.target.id === selectedLink.target.id
         )
-          return 1;
-        return 0.1;
-      });
+          return false;
+        return true;
+      };
+
+      nodeCircles.attr('opacity', (d) => (isDimmed(d) ? 0.1 : 1));
+      nodeLabels.attr('opacity', (d) => (isDimmed(d) ? 0.1 : 1));
+      linkPaths.attr('opacity', (l) => (isLinkDimmed(l) ? 0.1 : 1));
+      // 🔹 Highlight link labels as well
+      linkLabels.attr('opacity', (l) => (isLinkDimmed(l) ? 0.1 : 1));
     };
 
     nodeCircles.on('mouseover', (event, d) => highlight(d.id, null));
     nodeCircles.on('mouseout', () => highlight(null, null));
 
-    linkPaths.on('mouseover', (event, d) => highlight(null, d));
+    linkPaths.on('mouseover', (event, d) => highlight(null, d as any));
     linkPaths.on('mouseout', () => highlight(null, null));
   }, [data, dimensions]);
 
