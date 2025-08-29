@@ -279,10 +279,10 @@ export function DefineRelationshipSheet({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex h-full flex-col"
+            className="block w-full space-y-5"
           >
             <SheetBody className="flex-1 px-5 py-0">
-              <ScrollArea className="h-full pe-3 -me-3">
+              <ScrollArea className="h-[calc(100dvh-11.75rem)] pe-3 -me-3">
                 {error && (
                   <Alert
                     className="my-4"
